@@ -1,26 +1,20 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { combineReducers } from 'redux';
 
-import { save, get } from '../utils/db';
+import configureStore from './configure';
+
 import clocking from './clocking';
 import ui from './ui';
+import auth from './auth';
 
-const reducers = combineReducers({
-  clocking,
-  ui,
-});
+import rootSaga from './sagas';
 
-const storage = store => next => action => {
-  const result = next(action);
-  save(store.getState());
-  return result;
-};
-
-const preloadedState = get();
-
-const storeArgs = [reducers, preloadedState, applyMiddleware(storage)].filter(
-  Boolean,
+const store = configureStore(
+  combineReducers({
+    clocking,
+    ui,
+    auth,
+  }),
+  rootSaga,
 );
-
-const store = createStore(...storeArgs);
 
 export default store;
