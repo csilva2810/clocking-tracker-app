@@ -1,0 +1,1 @@
+export const SET_SELECTED_MONTH = 'ui/SET_SELECTED_MONTH';
