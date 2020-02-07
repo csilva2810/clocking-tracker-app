@@ -110,8 +110,6 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
             return 'Data já cadastrada';
           }
 
-          console.log(value, dateFormat);
-
           if (!moment(value, dateFormat).isValid()) {
             return 'Data inválida';
           }
@@ -150,15 +148,16 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
     },
   });
 
+  // prettier-ignore
   const canCalculateWorkedHours = Boolean(
     fields.in &&
-      fields.lunchStart &&
-      fields.lunchEnd &&
-      fields.out &&
-      !errors.in &&
-      !errors.lunchStart &&
-      !errors.lunchEnd &&
-      !errors.out,
+    fields.lunchStart &&
+    fields.lunchEnd &&
+    fields.out &&
+    !errors.in &&
+    !errors.lunchStart &&
+    !errors.lunchEnd &&
+    !errors.out,
   );
   const days = useSelector(state => state.clocking);
   const config = {

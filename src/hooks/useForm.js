@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function useForm(config) {
   const [fields, setFields] = useState(config.fields);
@@ -8,7 +8,7 @@ export default function useForm(config) {
   function setFieldValue(name, value) {
     setFields({
       ...fields,
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -18,13 +18,13 @@ export default function useForm(config) {
       onChange: e => {
         setFieldValue(name, e.target.value);
       },
-      onBlur: validateForm
+      onBlur: validateForm,
     };
   }
 
   function validateForm(e) {
     const err = {};
-    let name = "";
+    let name = '';
 
     if (e && e.target && e.target.name) {
       name = e.target.name;
@@ -65,7 +65,7 @@ export default function useForm(config) {
     if (name) {
       setErrors({
         ...errors,
-        [name]: err[name]
+        [name]: err[name],
       });
     } else {
       setErrors(err);
@@ -79,6 +79,6 @@ export default function useForm(config) {
     bindField,
     errors,
     validateForm,
-    setFieldValue
+    setFieldValue,
   };
 }

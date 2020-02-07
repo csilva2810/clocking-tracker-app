@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { primaryColor } from "../../../styles/variables";
+import { primaryColor } from '../../../styles/variables';
 
 export default styled.header`
   position: fixed;
