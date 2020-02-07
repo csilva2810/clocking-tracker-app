@@ -1,29 +1,45 @@
-import { Controller, Get, Post, Patch, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Body,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+import { User } from '../user/user.decotator';
 
 import { ClockingService } from './clocking.service';
 import { CreateClockingDto } from './dtos/create-clocking.dto';
 import { UpdateClockingDto } from './dtos/update-clocking.dto';
 import { Clocking } from './interfaces/clocking.interface';
 
-@Controller('clocking')
+@UseGuards(AuthGuard('jwt'))
+@Controller('clockings')
 export class ClockingController {
   constructor(private readonly clockingService: ClockingService) {}
 
   @Get()
-  async findAll(): Promise<Clocking[]> {
-    return this.clockingService.findAll();
+  findAll(@User('_id') userId: string): Promise<Clocking[]> {
+    return this.clockingService.findAll(userId);
   }
 
   @Post()
-  async create(@Body() createClockingDto: CreateClockingDto): Promise<any> {
-    return this.clockingService.create(createClockingDto);
+  create(
+    @Body() createClockingDto: CreateClockingDto,
+    @User('_id') userId: string,
+  ): Promise<any> {
+    return this.clockingService.create(createClockingDto, userId);
   }
 
   @Patch(':id')
-  async update(
+  update(
     @Param('id') id: string,
     @Body() updateClockingDto: UpdateClockingDto,
+    @User('_id') userId: string,
   ): Promise<Clocking> {
-    return await this.clockingService.update(id, updateClockingDto);
+    return this.clockingService.update(id, updateClockingDto, userId);
   }
 }

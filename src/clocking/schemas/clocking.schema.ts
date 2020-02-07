@@ -5,15 +5,19 @@ import { Clocking } from '../interfaces/clocking.interface';
 export const ClockingSchema = new mongoose.Schema<Clocking>({
   date: {
     type: Date,
-    unique: true,
+    required: true,
   },
-  in: Number,
-  lunchStart: Number,
-  lunchEnd: Number,
-  out: Number,
-  workedHours: Number,
-  balance: Number,
+  in: { type: Number, default: 0 },
+  lunchStart: { type: Number, default: 0 },
+  lunchEnd: { type: Number, default: 0 },
+  out: { type: Number, default: 0 },
+  workedHours: { type: Number, default: 0 },
+  balance: { type: Number, default: 0 },
   config: {
     workloadHours: Number,
+  },
+  usersId: {
+    type: String,
+    required: true,
   },
 });

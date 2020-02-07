@@ -12,31 +12,38 @@ export class ClockingService {
     @InjectModel('Clocking') private readonly clockingModel: Model<Clocking>,
   ) {}
 
-  async findAll(): Promise<Clocking[]> {
-    return this.clockingModel.find().exec();
+  findAll(userId: string): Promise<Clocking[]> {
+    return this.clockingModel.find({ usersId: userId }).exec();
   }
 
-  async create(createClockingDto: CreateClockingDto): Promise<Clocking> {
-    const createdClocking = new this.clockingModel({
-      date: new Date(createClockingDto.date),
+  async create(
+    createClockingDto: CreateClockingDto,
+    userId: string,
+  ): Promise<Clocking> {
+    return await this.clockingModel.create({
       ...createClockingDto,
+      usersId: userId,
     });
-
-    return createdClocking.save();
   }
 
   async update(
     id: string,
     updateClockingDto: UpdateClockingDto,
+    userId: string,
   ): Promise<Clocking> {
-    try {
-      const document = await this.clockingModel.findById(id);
+    const document = await this.clockingModel.findOne({
+      _id: id,
+      usersId: userId,
+    });
 
-      document.set(updateClockingDto);
-
-      return await document.save();
-    } catch {
-      throw new NotFoundException();
+    if (!document) {
+      throw new NotFoundException(
+        `Resource not found for the id: ${id}, user: ${userId}`,
+      );
     }
+
+    document.set(updateClockingDto);
+
+    return await document.save();
   }
 }

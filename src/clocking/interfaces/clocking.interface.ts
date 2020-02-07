@@ -11,4 +11,5 @@ export interface Clocking extends Document {
   config: {
     workloadHours: number;
   };
+  usersId: string;
 }
