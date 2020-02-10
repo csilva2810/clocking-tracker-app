@@ -15,4 +15,10 @@ export const UserSchema = new mongoose.Schema<User>({
   name: { type: String, default: '' },
   gender: { type: String, default: '' },
   avatar: { type: String, default: '' },
+  config: {
+    workLoadHours: {
+      type: Number,
+      default: 8,
+    },
+  },
 });

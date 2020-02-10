@@ -14,29 +14,47 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  /**
+   * Construct an user object only with attributes that can be publicly exposed
+   */
+  private getPublicUserData(
+    user: User,
+    aditionalData: Record<string, any> = {},
+  ) {
+    return {
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+      config: user.config,
+      ...aditionalData,
+    };
+  }
+
+  private generateToken(user: User): string {
+    return this.jwtService.sign({
+      email: user.email,
+      sub: user._id,
+    });
+  }
+
+  async validateUser(email: string, pass: string) {
     const user = await this.userService.findOne(email);
 
     if (user) {
       const passwordCheck = await compare(pass, user.password);
 
       if (passwordCheck) {
-        return user;
+        return this.getPublicUserData(user);
       }
     }
 
     return null;
   }
 
-  async login(user: User) {
-    const payload = {
-      email: user.email,
-      sub: user._id,
-    };
+  login(user: User) {
+    const token = this.generateToken(user);
 
-    return {
-      token: this.jwtService.sign(payload),
-    };
+    return this.getPublicUserData(user, { token });
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -48,10 +66,16 @@ export class AuthService {
 
     const encryptedPassword = await hash(signUpDto.password, 10);
     const newUser = await this.userService.create({
-      email: signUpDto.email,
+      ...signUpDto,
       password: encryptedPassword,
     });
 
-    return await this.login(newUser);
+    return this.login(newUser);
+  }
+
+  async getAuthenticatedUser(email: string) {
+    const user = await this.userService.findOne(email);
+
+    return this.getPublicUserData(user);
   }
 }
