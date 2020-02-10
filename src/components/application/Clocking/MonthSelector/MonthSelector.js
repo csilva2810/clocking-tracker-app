@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 
-import { HeaderButton, HeaderTitle } from '../../../ui/Header';
+import { HeaderTitle } from '../../../ui/Header';
+import IconButton from '../../../ui/IconButton';
+
 import { monthYearFormat } from '../../../../utils/time';
 
 const Container = styled.div`
@@ -10,6 +12,8 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.1);
 `;
 
 const MonthSelector = props => {
@@ -44,13 +48,9 @@ const MonthSelector = props => {
 
   return (
     <Container>
-      <HeaderButton onClick={previousMonth}>
-        <i className="material-icons">keyboard_arrow_left</i>
-      </HeaderButton>
+      <IconButton onClick={previousMonth} icon="keyboard_arrow_left" color="accent" />
       <HeaderTitle>{getMoment(month).format('MMM - YYYY')}</HeaderTitle>
-      <HeaderButton onClick={nextMonth}>
-        <i className="material-icons">keyboard_arrow_right</i>
-      </HeaderButton>
+      <IconButton onClick={nextMonth} icon="keyboard_arrow_right" color="accent" />
     </Container>
   );
 };

@@ -8,8 +8,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-around;
   padding: 8px;
-  background-color: #37474f;
-  color: white;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.1);
 `;
 
 function calculateSummary(clocking = []) {

@@ -12,22 +12,31 @@ const initialState = {
 const authReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case ActionTypes.LOGIN_REQUEST: {
+      case ActionTypes.USER_REQUEST:
+      case ActionTypes.LOGIN_REQUEST:
+      case ActionTypes.SIGNUP_REQUEST: {
         draft.loading = true;
         draft.error = false;
         break;
       }
 
-      case ActionTypes.LOGIN_FAILURE: {
+      case ActionTypes.AUTH_FAILURE: {
         draft.loading = false;
         draft.error = action.error;
         break;
       }
 
-      case ActionTypes.LOGIN_SUCCESS: {
+      case ActionTypes.AUTH_SUCCESS: {
         draft.loading = false;
         draft.error = '';
         draft.user = action.user;
+        break;
+      }
+
+      case ActionTypes.RESET: {
+        Object.entries(initialState).forEach(([key, value]) => {
+          draft[key] = value;
+        });
         break;
       }
     }

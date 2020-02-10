@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 
 import { accentColor } from '../../../styles/variables';
@@ -27,8 +27,7 @@ const Button = styled.button`
 
   &:hover,
   &:focus {
-    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16),
-      0 5px 14px 0 rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 5px 14px 0 rgba(0, 0, 0, 0.18);
   }
 `;
 
@@ -40,4 +39,4 @@ const Fab = ({ children, onClick }) => (
   </Container>
 );
 
-export default Fab;
+export default memo(Fab);

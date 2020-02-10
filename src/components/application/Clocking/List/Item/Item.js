@@ -54,7 +54,7 @@ const ClockingListItem = props => {
   }
 
   function handleClick() {
-    history.push(`/clocking/${encodeURIComponent(day.date)}/edit`);
+    history.push(`/app/clocking/${encodeURIComponent(day.date)}/edit`);
   }
 
   return (
@@ -62,9 +62,7 @@ const ClockingListItem = props => {
       <Row>
         <Title>
           {day.date}{' '}
-          <Subtitle as="span">
-            {moment(day.date, dateFormat).format('ddd')}
-          </Subtitle>
+          <Subtitle as="span">{moment(day.date, dateFormat).format('ddd')}</Subtitle>
         </Title>
       </Row>
       <Row>

@@ -1,1 +1,2 @@
-export { default, HeaderButton, HeaderTitle } from './Header';
+export { default } from './Header';
+export * from './Header';

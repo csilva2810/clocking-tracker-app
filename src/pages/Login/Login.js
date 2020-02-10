@@ -1,13 +1,68 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { loginRequest } from '../../store/auth';
+import { loginRequest, signupRequest, reset } from '../../store/auth';
+import { dangerColor } from '../../styles/variables';
+
+import Page from '../../components/ui/Page';
+import Spinner from '../../components/ui/Spinner';
+import Logo from '../../components/ui/Logo';
+import Input from '../../components/ui/Input';
+import { Button, TextButton } from '../../components/ui/Button';
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  margin: 0 auto;
+  width: 400px;
+  max-width: 100%;
+  height: 100%;
+
+  form {
+    width: 100%;
+  }
+`;
+
+const Title = styled.h1`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 32px;
+`;
+
+const FormSection = styled.section`
+  margin-bottom: 16px;
+  padding: 0 16px;
+
+  &:first-child {
+    padding-top: 32px;
+  }
+
+  &:last-child {
+    padding-top: 16px;
+    padding-bottom: 32px;
+    margin-bottom: 0;
+  }
+`;
+
+const Error = styled.div`
+  width: 100%;
+  text-align: center;
+  color: ${dangerColor};
+`;
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const { loading, error, user } = useSelector(state => state.auth);
+  const [mode, setMode] = useState('login');
   const [state, setState] = useState({
+    name: '',
     email: '',
     password: '',
   });
@@ -15,12 +70,9 @@ const LoginPage = () => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    dispatch(
-      loginRequest({
-        email: state.email,
-        password: state.password,
-      }),
-    );
+    const authenticate = mode === 'login' ? loginRequest : signupRequest;
+
+    dispatch(authenticate(state));
   }
 
   function handleChange(e) {
@@ -32,43 +84,103 @@ const LoginPage = () => {
     });
   }
 
-  if (user) {
-    return <Redirect to="/clocking" />;
+  function toggleMode() {
+    const nextState = mode === 'login' ? 'signup' : 'login';
+    setMode(nextState);
+    dispatch(reset());
   }
 
+  if (user) {
+    return <Redirect to="/app/clocking" />;
+  }
+
+  const text = {
+    login: {
+      title: 'Entrar',
+      button: 'Entrar',
+      error: 'Login falhou 😕. Tente novamente.',
+      footer: 'Não tem uma conta?',
+      footerButton: 'Criar conta',
+    },
+    signup: {
+      title: 'Criar conta',
+      button: 'Criar conta',
+      error: 'Erro ao criar conta 😕. Tente novamente.',
+      footer: 'Já tem uma conta?',
+      footerButton: 'Entrar',
+    },
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <div>Login failed. Try again...</div>}
-      <div>
-        <label htmlFor="email">E-mail</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="johndoe@gmail.com"
-          value={state.email}
-          onChange={handleChange}
-        />
-      </div>
+    <Page>
+      <Container>
+        <form onSubmit={handleSubmit}>
+          <FormSection>
+            <Title>
+              {text[mode].title}
+              <Logo size="40px" />
+            </Title>
+          </FormSection>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="your secret password"
-          value={state.password}
-          onChange={handleChange}
-        />
-      </div>
+          {mode === 'signup' && (
+            <FormSection>
+              <Input
+                label="Nome"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="José da Silva"
+                value={state.name}
+                onChange={handleChange}
+              />
+            </FormSection>
+          )}
 
-      <div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'wait...' : 'Login'}
-        </button>
-      </div>
-    </form>
+          <FormSection>
+            <Input
+              label="E-mail"
+              type="text"
+              id="email"
+              name="email"
+              placeholder="josedasilva@gmail.com"
+              value={state.email}
+              onChange={handleChange}
+            />
+          </FormSection>
+
+          <FormSection>
+            <Input
+              label="Senha"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Sua senha super secreta"
+              value={state.password}
+              onChange={handleChange}
+            />
+          </FormSection>
+
+          {error && (
+            <FormSection>
+              <Error>{text[mode].error}</Error>
+            </FormSection>
+          )}
+
+          <FormSection>
+            <Button type="submit" disabled={loading} sexy rounded color="primary">
+              {!loading ? text[mode].button : <Spinner />}
+            </Button>
+          </FormSection>
+
+          <FormSection>
+            {text[mode].footer}{' '}
+            <TextButton type="button" onClick={toggleMode} color="primary">
+              {text[mode].footerButton}
+            </TextButton>
+          </FormSection>
+        </form>
+      </Container>
+    </Page>
   );
 };
 
