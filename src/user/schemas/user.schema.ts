@@ -16,7 +16,7 @@ export const UserSchema = new mongoose.Schema<User>({
   gender: { type: String, default: '' },
   avatar: { type: String, default: '' },
   config: {
-    workLoadHours: {
+    workloadHours: {
       type: Number,
       default: 8,
     },
