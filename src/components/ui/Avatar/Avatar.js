@@ -15,7 +15,6 @@ const Container = styled.div`
   font-size: 1rem;
   font-weight: bold;
   overflow: hidden;
-  cursor: pointer;
 `;
 
 const Image = styled.img`

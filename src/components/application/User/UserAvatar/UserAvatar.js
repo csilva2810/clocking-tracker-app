@@ -1,32 +1,70 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { accentColor } from '../../../../styles/variables';
 import Avatar from '../../../ui/Avatar';
 
-const Button = styled.button`
-  cursor: pointer;
+const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0 auto;
   background: none;
   border: none;
   outline: none;
-  padding: 0;
 `;
 
-const UserAvatar = ({ history }) => {
+const Edit = styled.div`
+  position: absolute;
+  top: ${props => props.size};
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  margin-top: -14px;
+  padding: 3px 4px;
+  width: 60px;
+  height: auto;
+  color: ${accentColor};
+  font-size: 0.8rem;
+  text-align: center;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+`;
+
+const UserName = styled.b`
+  display: block;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 16px;
+`;
+
+const UserAvatar = ({
+  isEditable = false,
+  showName = false,
+  size = '40px',
+  avatar = '',
+}) => {
   const user = useSelector(state => state.auth.user);
-
-  function handleClick() {
-    history.push('/app/profile');
-  }
-
-  const avatarProps = user.avatar ? { image: user.avatar } : { name: user.name };
+  const props = {
+    size,
+    name: user.name,
+    image: avatar || user.avatar,
+  };
 
   return (
-    <Button onClick={handleClick}>
-      <Avatar {...avatarProps} />
-    </Button>
+    <Container>
+      {isEditable && <Edit size={size}>Alterar</Edit>}
+
+      <Avatar {...props} />
+
+      {showName && <UserName>{user.name}</UserName>}
+    </Container>
   );
 };
 
-export default withRouter(UserAvatar);
+export default UserAvatar;

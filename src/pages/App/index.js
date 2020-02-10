@@ -14,6 +14,8 @@ import Clocking from './Clocking';
 import CreateClocking from './CreateClocking';
 import EditClocking from './EditClocking';
 
+import ProfilePage from './Profile';
+
 const App = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
@@ -72,6 +74,8 @@ const App = () => {
       <PrivateRoute exact path="/app/clocking" component={Clocking} />
       <PrivateRoute exact path="/app/clocking/create" component={CreateClocking} />
       <PrivateRoute exact path="/app/clocking/:date/edit" component={EditClocking} />
+
+      <PrivateRoute exact path="/app/profile" component={ProfilePage} />
     </>
   );
 };

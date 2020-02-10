@@ -1,15 +1,22 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { primaryColor, accentColor } from '../../../styles/variables';
+import { colorsMap as colors, dangerColor } from '../../../styles/variables';
 
-const Label = styled.label`
+export const Label = styled.label`
   display: block;
   width: 100%;
-  margin-bottom: 8px;
-  color: #777;
+  margin-bottom: 4px;
   font-weight: bold;
   font-size: 0.9rem;
+`;
+
+export const Error = styled.label`
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: ${dangerColor};
 `;
 
 const StyledInput = styled.input`
@@ -28,30 +35,30 @@ const StyledInput = styled.input`
     color: #bbb;
   }
 
-  ${props =>
-    props.color === 'primary' &&
+  ${({ color }) =>
     css`
       &:focus {
-        border-color: ${primaryColor};
-        box-shadow: 0 1px 0 0 ${primaryColor};
+        border-color: ${colors[color]};
+        box-shadow: 0 1px 0 0 ${colors[color]};
       }
     `}
 
-  ${props =>
-    props.color === 'accent' &&
-    css`
-      &:focus {
-        border-color: ${accentColor};
-        box-shadow: 0 1px 0 0 ${accentColor};
-      }
-    `}
+  &:read-only {
+    background-color: #fff !important;
+    border-color: #fff !important;
+    box-shadow: none !important;
+    cursor: default !important;
+  }
 `;
 
-const Input = ({ label, color = 'primary', ...inputAttrs }) => (
-  <div>
+const Input = ({ label, error, color = 'primary', ...inputAttrs }) => (
+  <>
     {label && <Label htmlFor={inputAttrs.id}>{label}</Label>}
+
     <StyledInput color={color} {...inputAttrs} />
-  </div>
+
+    {error && <Error htmlFor={inputAttrs.id}>{error}</Error>}
+  </>
 );
 
 export default Input;

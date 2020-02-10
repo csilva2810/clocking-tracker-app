@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Fab from '../../../components/ui/Fab';
 import Header, { HeaderTitle, HeaderColumn } from '../../../components/ui/Header';
@@ -25,6 +26,10 @@ const Clocking = ({ history }) => {
     dispatch(setSelectedMonth(month));
   }
 
+  function handleFabClick() {
+    history.push('/app/clocking/create');
+  }
+
   return (
     <Page withHeader>
       <Header>
@@ -33,7 +38,9 @@ const Clocking = ({ history }) => {
           <HeaderTitle>Marcações</HeaderTitle>
         </HeaderColumn>
         <HeaderColumn>
-          <UserAvatar />
+          <Link to="/app/profile">
+            <UserAvatar />
+          </Link>
         </HeaderColumn>
       </Header>
 
@@ -42,7 +49,7 @@ const Clocking = ({ history }) => {
 
       <ClockingList days={currentClocking} />
 
-      <Fab onClick={() => history.push('/app/clocking/create')} />
+      <Fab onClick={handleFabClick} />
     </Page>
   );
 };

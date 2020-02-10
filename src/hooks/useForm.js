@@ -1,13 +1,19 @@
 import { useState } from 'react';
 
-export default function useForm(config) {
-  const [fields, setFields] = useState(config.fields);
+export default function useForm({ defaultValues = {}, validations = {} }) {
+  const [fields, setFields] = useState(defaultValues);
   const [errors, setErrors] = useState({});
-  const validations = config.validations;
 
   function setFieldValue(name, value) {
     setFields({
       ...fields,
+      [name]: value,
+    });
+  }
+
+  function setFieldError(name, value) {
+    setErrors({
+      ...errors,
       [name]: value,
     });
   }
@@ -18,67 +24,70 @@ export default function useForm(config) {
       onChange: e => {
         setFieldValue(name, e.target.value);
       },
-      onBlur: validateForm,
+      onBlur: e => {
+        const { name, value } = e.target;
+        const error = validateField(name, value);
+
+        if (error) {
+          setFieldError(name, error);
+          return;
+        }
+
+        setFieldError(name, null);
+      },
     };
   }
 
-  function validateForm(e) {
+  /**
+   * Validates a specific field
+   * returns an errorMessage if the validation fails
+   * returns null when no validation error was found
+   * */
+  function validateField(name, value) {
+    const rules = validations[name];
+
+    if (rules.required) {
+      if (!value.trim()) {
+        return rules.required;
+      }
+    }
+
+    if (rules.pattern) {
+      if (!rules.pattern.value.test(value)) {
+        return rules.pattern.message;
+      }
+    }
+
+    if (rules.validate) {
+      const error = rules.validate(value);
+
+      if (error) {
+        return error;
+      }
+    }
+
+    return null;
+  }
+
+  function validateForm() {
     const err = {};
-    let name = '';
 
-    if (e && e.target && e.target.name) {
-      name = e.target.name;
-    }
+    Object.entries(validations).forEach(([name, rules]) => {
+      err[name] = validateField(name, rules);
+    });
 
-    for (let key in validations) {
-      const rules = validations[key];
-      const field = fields[key];
-
-      if (name && name !== key) {
-        continue;
-      }
-
-      if (rules.required) {
-        if (!field.trim()) {
-          err[key] = rules.required;
-          continue;
-        }
-      }
-
-      if (rules.pattern) {
-        if (!rules.pattern.value.test(field)) {
-          err[key] = rules.pattern.message;
-          continue;
-        }
-      }
-
-      if (rules.validate) {
-        const error = rules.validate(field);
-
-        if (error) {
-          err[key] = error;
-          continue;
-        }
-      }
-    }
-
-    if (name) {
-      setErrors({
-        ...errors,
-        [name]: err[name],
-      });
-    } else {
-      setErrors(err);
-    }
+    setErrors(err);
 
     return Object.keys(err).length > 0;
   }
 
   return {
     fields,
-    bindField,
     errors,
+    bindField,
+    validateField,
     validateForm,
     setFieldValue,
+    setFieldError,
   };
 }

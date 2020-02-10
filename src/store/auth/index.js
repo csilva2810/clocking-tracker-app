@@ -7,6 +7,8 @@ const initialState = {
   loading: false,
   error: '',
   user: null,
+  updating: false,
+  updateError: '',
 };
 
 const authReducer = (state = initialState, action) =>
@@ -30,6 +32,28 @@ const authReducer = (state = initialState, action) =>
         draft.loading = false;
         draft.error = '';
         draft.user = action.user;
+        break;
+      }
+
+      case ActionTypes.UPDATE_USER_REQUEST: {
+        draft.updating = true;
+        draft.updateError = false;
+        break;
+      }
+
+      case ActionTypes.UPDATE_USER_FAILURE: {
+        draft.updating = false;
+        draft.updateError = action.error;
+        break;
+      }
+
+      case ActionTypes.UPDATE_USER_SUCCESS: {
+        draft.updating = false;
+        draft.updateError = '';
+        draft.user = {
+          ...state.user,
+          ...action.user,
+        };
         break;
       }
 
