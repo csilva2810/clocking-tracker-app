@@ -9,6 +9,7 @@ const initialState = {
   user: null,
   updating: false,
   updateError: '',
+  updateSuccess: false,
 };
 
 const authReducer = (state = initialState, action) =>
@@ -31,29 +32,34 @@ const authReducer = (state = initialState, action) =>
       case ActionTypes.AUTH_SUCCESS: {
         draft.loading = false;
         draft.error = '';
-        draft.user = action.user;
         break;
       }
 
       case ActionTypes.UPDATE_USER_REQUEST: {
         draft.updating = true;
         draft.updateError = false;
+        draft.updateSuccess = false;
         break;
       }
 
       case ActionTypes.UPDATE_USER_FAILURE: {
         draft.updating = false;
         draft.updateError = action.error;
+        draft.updateSuccess = false;
         break;
       }
 
       case ActionTypes.UPDATE_USER_SUCCESS: {
         draft.updating = false;
         draft.updateError = '';
-        draft.user = {
-          ...state.user,
-          ...action.user,
-        };
+        draft.updateSuccess = true;
+        break;
+      }
+
+      case ActionTypes.UPDATE_USER_RESET: {
+        draft.updating = false;
+        draft.updateError = '';
+        draft.updateSuccess = false;
         break;
       }
 
@@ -61,6 +67,14 @@ const authReducer = (state = initialState, action) =>
         Object.entries(initialState).forEach(([key, value]) => {
           draft[key] = value;
         });
+        break;
+      }
+
+      case ActionTypes.SET_USER: {
+        draft.user = {
+          ...state.user,
+          ...action.user,
+        };
         break;
       }
     }

@@ -1,7 +1,5 @@
 import styled, { keyframes, css } from 'styled-components';
 
-import { colorsMap as colors } from '../../../styles/variables';
-
 const spin = keyframes`
   from {
     transform: rotate(0deg);
@@ -23,7 +21,7 @@ export default styled.div`
   ${({ color }) =>
     color &&
     css`
-      border-color: ${colors[color]};
+      border-color: ${props => props.theme.colors[color].base};
     `}
 
   border-top-color: transparent;

@@ -1,35 +1,36 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useSpring } from 'react-spring';
 
 import { useSelector, useDispatch } from 'react-redux';
 
 import useForm from '../../../hooks/useForm';
-import usePrevious from '../../../hooks/usePrevious';
 import { toBase64 } from '../../../utils/file';
-import { updateUserRequest } from '../../../store/auth';
+import { updateUserRequest, updateUserReset } from '../../../store/auth';
+import { setTheme as setThemeAction } from '../../../store/ui';
 
 import UserAvatar from '../../../components/application/User/UserAvatar';
 
+import Text from '../../../components/ui/Text';
+import Page from '../../../components/ui/Page';
 import Alert from '../../../components/ui/Alert';
+import Input from '../../../components/ui/Input';
+import Switch from '../../../components/ui/Switch';
+import Button from '../../../components/ui/Button';
 import Spinner from '../../../components/ui/Spinner';
-import RadioGroup from '../../../components/ui/RadioGroup';
+import BottomMenu from '../../../components/ui/BottomMenu';
 import IconButton from '../../../components/ui/IconButton';
-import Input, { Label } from '../../../components/ui/Input';
-import { Button, FlatButton } from '../../../components/ui/Button';
+import FlatButton from '../../../components/ui/FlatButton';
 import Header, { HeaderColumn, HeaderTitle } from '../../../components/ui/Header';
 
 import * as Styles from './ProfileStyles';
 
 const ProfilePage = ({ history }) => {
   const dispatch = useDispatch();
-  const { user, updating, updateError } = useSelector(state => state.auth);
+  const { user, updating, updateError, updateSuccess } = useSelector(state => state.auth);
 
-  const prevUser = usePrevious(user);
   const avatarInputRef = useRef();
   const [avatar, setAvatar] = useState(user.avatar || '');
   const [theme, setTheme] = useState(user.config.theme || 'light');
-
-  const userUpdated = prevUser && prevUser !== user;
-
   const { fields, errors, bindField } = useForm({
     defaultValues: {
       name: user.name || '',
@@ -53,6 +54,14 @@ const ProfilePage = ({ history }) => {
   });
 
   useEffect(() => {
+    if (updateSuccess || updateError) {
+      setTimeout(() => {
+        dispatch(updateUserReset());
+      }, 3000);
+    }
+  }, [dispatch, updateSuccess, updateError]);
+
+  useEffect(() => {
     const inputRef = avatarInputRef.current;
     async function handleAvatarChange(e) {
       const avatar = await toBase64(e.target.files[0]);
@@ -71,6 +80,12 @@ const ProfilePage = ({ history }) => {
     avatarInputRef.current.click();
   }
 
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    dispatch(setThemeAction(next));
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -86,8 +101,11 @@ const ProfilePage = ({ history }) => {
     );
   }
 
+  const errorSpring = useSpring({ opacity: updateError ? 1 : 0 });
+  const successSpring = useSpring({ opacity: updateSuccess ? 1 : 0 });
+
   return (
-    <Styles.Page withHeader={true}>
+    <Page withHeader={true} alternative={true}>
       <Header>
         <HeaderColumn>
           <IconButton onClick={() => history.go(-1)} icon="arrow_back" />
@@ -102,7 +120,7 @@ const ProfilePage = ({ history }) => {
           </FlatButton>
         </Styles.AvatarContainer>
 
-        <Styles.BottomMenu>
+        <BottomMenu>
           <form onSubmit={handleSubmit}>
             <Styles.FileInput
               type="file"
@@ -113,7 +131,9 @@ const ProfilePage = ({ history }) => {
             />
 
             <Styles.TitleSection>
-              <Styles.Title>Dados pessoais</Styles.Title>
+              <Text scale="h6" weight="bold">
+                Dados pessoais
+              </Text>
             </Styles.TitleSection>
 
             <Styles.InputGroup>
@@ -141,7 +161,9 @@ const ProfilePage = ({ history }) => {
             </Styles.InputGroup>
 
             <Styles.TitleSection>
-              <Styles.Title>Configurações</Styles.Title>
+              <Text scale="h6" weight="bold">
+                Configurações
+              </Text>
             </Styles.TitleSection>
 
             <Styles.InputGroup>
@@ -157,52 +179,36 @@ const ProfilePage = ({ history }) => {
                 />
               </Styles.InputSection>
 
-              <Styles.InputSection>
-                <Label>Tema</Label>
+              <Styles.InputSection horizontal>
+                <Text as="label" scale="body2">
+                  Tema escuro:
+                </Text>
 
-                <br />
-
-                <RadioGroup
-                  selected={theme}
-                  items={[
-                    {
-                      label: 'Claro',
-                      name: 'theme',
-                      value: 'light',
-                      onChange: e => setTheme('light'),
-                    },
-                    {
-                      label: 'Escuro',
-                      name: 'theme',
-                      value: 'dark',
-                      onChange: e => setTheme('dark'),
-                    },
-                  ]}
-                />
+                <Switch isOn={theme === 'dark'} color="primary" onClick={toggleTheme} />
               </Styles.InputSection>
             </Styles.InputGroup>
-
-            {updateError && (
-              <Styles.InputSection>
-                <Alert color="danger">Erro ao salvar os dados. Tente novamente.</Alert>
-              </Styles.InputSection>
-            )}
-
-            {userUpdated && (
-              <Styles.InputSection>
-                <Alert color="success">Dados salvos com sucesso!</Alert>
-              </Styles.InputSection>
-            )}
 
             <Styles.InputSection>
               <Button type="submit" disabled={updating}>
                 {updating ? <Spinner /> : 'Salvar'}
               </Button>
             </Styles.InputSection>
+
+            {updateError && (
+              <Alert color="danger" style={errorSpring}>
+                Erro ao salvar os dados.
+              </Alert>
+            )}
+
+            {updateSuccess && (
+              <Alert color="success" style={successSpring}>
+                Dados salvos com sucesso!
+              </Alert>
+            )}
           </form>
-        </Styles.BottomMenu>
+        </BottomMenu>
       </Styles.Container>
-    </Styles.Page>
+    </Page>
   );
 };
 

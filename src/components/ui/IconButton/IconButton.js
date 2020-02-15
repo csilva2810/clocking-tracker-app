@@ -1,14 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { primaryColor, accentColor } from '../../../styles/variables';
-
-const colors = {
-  white: '#FFFFFF',
-  primary: primaryColor,
-  accent: accentColor,
-};
-
 export const Button = styled.button`
   display: flex;
   align-items: center;
@@ -30,14 +22,14 @@ export const Button = styled.button`
     background-color: rgba(51, 51, 51, 0.1);
   }
 
-  ${({ color }) =>
+  ${({ theme, color }) =>
     color &&
     css`
-      color: ${colors[color]};
+      color: ${theme.colors[color].base};
 
       &:hover,
       &:focus {
-        background-color: ${colors[color]}22;
+        background-color: ${theme.colors[color].base}22;
       }
     `}
 `;

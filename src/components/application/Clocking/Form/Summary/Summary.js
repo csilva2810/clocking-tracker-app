@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: ${props => props.theme.colors.surface.base};
   border-radius: 6px;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16);
 `;
@@ -11,7 +11,7 @@ const Card = styled.div`
 const CardTitle = styled.div`
   padding: 8px;
   font-weight: bold;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid ${props => props.theme.colors.divisors.base};
 `;
 
 const CardBody = styled.div`

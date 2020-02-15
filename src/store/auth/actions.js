@@ -19,9 +19,8 @@ export const authFailure = error => ({
   error,
 });
 
-export const authSuccess = user => ({
+export const authSuccess = () => ({
   type: ActionTypes.AUTH_SUCCESS,
-  user,
 });
 
 export const userRequest = payload => ({
@@ -38,7 +37,15 @@ export const updateUserFailure = error => ({
   error,
 });
 
-export const updateUserSuccess = user => ({
+export const updateUserSuccess = () => ({
   type: ActionTypes.UPDATE_USER_SUCCESS,
+});
+
+export const updateUserReset = () => ({
+  type: ActionTypes.UPDATE_USER_RESET,
+});
+
+export const setUser = user => ({
+  type: ActionTypes.SET_USER,
   user,
 });

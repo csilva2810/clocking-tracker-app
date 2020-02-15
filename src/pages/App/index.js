@@ -3,10 +3,9 @@ import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { removeToken, getToken, fetchAuthenticatedUser } from '../../services/auth';
-import { authSuccess } from '../../store/auth';
+import { setUser, authSuccess } from '../../store/auth';
 
 import PrivateRoute from '../../components/application/PrivateRoute';
-import Page from '../../components/ui/Page';
 import Spinner from '../../components/ui/Spinner';
 import PageLoading from '../../components/ui/PageLoading';
 
@@ -33,7 +32,8 @@ const App = () => {
       try {
         const response = await fetchAuthenticatedUser();
 
-        dispatch(authSuccess(response.data));
+        dispatch(setUser(response.data));
+        dispatch(authSuccess());
       } catch {
         removeToken();
         setError(true);
@@ -57,11 +57,9 @@ const App = () => {
   // show a spinner header
   if (loading) {
     return (
-      <Page>
-        <PageLoading>
-          <Spinner color="primary" size="40px" borderWidth="3px" />
-        </PageLoading>
-      </Page>
+      <PageLoading>
+        <Spinner color="accent" size="40px" borderWidth="3px" />
+      </PageLoading>
     );
   }
 

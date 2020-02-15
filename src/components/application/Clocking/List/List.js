@@ -10,7 +10,7 @@ const EmptyList = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 300px;
-  color: #777;
+  color: ${props => props.theme.colors.text.variant1};
 
   > i {
     display: block;
@@ -22,7 +22,7 @@ const EmptyList = styled.div`
 const List = styled.ul`
   list-style: none;
   margin: 0;
-  background-color: #fff;
+  background-color: ${props => props.theme.colors.surface.base};
 `;
 
 const ClockingList = ({ days = [] }) => {

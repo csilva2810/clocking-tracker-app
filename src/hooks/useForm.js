@@ -72,13 +72,17 @@ export default function useForm({ defaultValues = {}, validations = {} }) {
   function validateForm() {
     const err = {};
 
-    Object.entries(validations).forEach(([name, rules]) => {
-      err[name] = validateField(name, rules);
+    Object.keys(validations).forEach(name => {
+      err[name] = validateField(name, fields[name]);
     });
 
-    setErrors(err);
+    const hasErrors = Object.keys(err).length > 0;
 
-    return Object.keys(err).length > 0;
+    if (hasErrors) {
+      setErrors(err);
+    }
+
+    return hasErrors;
   }
 
   return {

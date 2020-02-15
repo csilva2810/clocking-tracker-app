@@ -2,8 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { accentColor } from '../../../../styles/variables';
 import Avatar from '../../../ui/Avatar';
+import Text from '../../../ui/Text';
 
 const Container = styled.div`
   position: relative;
@@ -11,11 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0;
   margin: 0 auto;
-  background: none;
-  border: none;
-  outline: none;
 `;
 
 const Edit = styled.div`
@@ -28,18 +24,15 @@ const Edit = styled.div`
   padding: 3px 4px;
   width: 60px;
   height: auto;
-  color: ${accentColor};
+  color: ${props => props.theme.colors.primary.base};
+  background-color: ${props => props.theme.colors.surface.base};
   font-size: 0.8rem;
   text-align: center;
   border-radius: 22px;
-  background: white;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 `;
 
-const UserName = styled.b`
-  display: block;
-  font-weight: bold;
-  font-size: 1.1rem;
+const UserName = styled.div`
   margin-top: 16px;
 `;
 
@@ -62,7 +55,11 @@ const UserAvatar = ({
 
       <Avatar {...props} />
 
-      {showName && <UserName>{user.name}</UserName>}
+      {showName && (
+        <UserName>
+          <Text scale="h6">{user.name}</Text>
+        </UserName>
+      )}
     </Container>
   );
 };

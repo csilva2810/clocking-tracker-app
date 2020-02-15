@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import Fab from '../../../components/ui/Fab';
 import Header, { HeaderTitle, HeaderColumn } from '../../../components/ui/Header';
 import Page from '../../../components/ui/Page';
-import Logo from '../../../components/ui/Logo';
 
 import ClockingList from '../../../components/application/Clocking/List';
 import MonthSelector from '../../../components/application/Clocking/MonthSelector';
@@ -34,7 +33,6 @@ const Clocking = ({ history }) => {
     <Page withHeader>
       <Header>
         <HeaderColumn>
-          <Logo size="40px" />
           <HeaderTitle>Marcações</HeaderTitle>
         </HeaderColumn>
         <HeaderColumn>

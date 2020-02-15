@@ -4,13 +4,14 @@ import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { loginRequest, signupRequest, reset } from '../../store/auth';
-import { dangerColor } from '../../styles/variables';
 
+import Text from '../../components/ui/Text';
 import Page from '../../components/ui/Page';
-import Spinner from '../../components/ui/Spinner';
 import Logo from '../../components/ui/Logo';
 import Input from '../../components/ui/Input';
-import { Button, TextButton } from '../../components/ui/Button';
+import Button from '../../components/ui/Button';
+import Spinner from '../../components/ui/Spinner';
+import TextButton from '../../components/ui/TextButton';
 
 const Container = styled.div`
   display: flex;
@@ -27,12 +28,10 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 2.5rem;
-  font-weight: bold;
   margin-bottom: 32px;
 `;
 
@@ -49,12 +48,6 @@ const FormSection = styled.section`
     padding-bottom: 32px;
     margin-bottom: 0;
   }
-`;
-
-const Error = styled.div`
-  width: 100%;
-  text-align: center;
-  color: ${dangerColor};
 `;
 
 const LoginPage = () => {
@@ -117,7 +110,9 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit}>
           <FormSection>
             <Title>
-              {text[mode].title}
+              <Text scale="h1" weight="bold">
+                {text[mode].title}
+              </Text>
               <Logo size="40px" />
             </Title>
           </FormSection>
@@ -162,12 +157,14 @@ const LoginPage = () => {
 
           {error && (
             <FormSection>
-              <Error>{text[mode].error}</Error>
+              <Text color="danger" align="center">
+                {text[mode].error}
+              </Text>
             </FormSection>
           )}
 
           <FormSection>
-            <Button type="submit" disabled={loading} sexy rounded color="primary">
+            <Button type="submit" disabled={loading} sexy rounded>
               {!loading ? text[mode].button : <Spinner />}
             </Button>
           </FormSection>

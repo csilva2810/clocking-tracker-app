@@ -9,6 +9,7 @@ import {
   authSuccess,
   updateUserSuccess,
   updateUserFailure,
+  setUser,
 } from './actions';
 
 /**
@@ -20,7 +21,8 @@ function* authenticate(type, user) {
   try {
     const response = yield call(method, user);
 
-    yield put(authSuccess(response.data));
+    yield put(setUser(response.data));
+    yield put(authSuccess());
 
     return response.data;
   } catch (error) {
@@ -47,7 +49,9 @@ function* authFlow() {
 function* updateUser(action) {
   try {
     const response = yield call(userService.update, action.payload);
-    yield put(updateUserSuccess(response.data));
+
+    yield put(setUser(response.data));
+    yield put(updateUserSuccess());
   } catch (e) {
     yield put(updateUserFailure(e));
   }

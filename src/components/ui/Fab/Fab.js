@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 
-import { accentColor } from '../../../styles/variables';
-
 const Container = styled.div`
   position: fixed;
   bottom: 16px;
@@ -19,8 +17,8 @@ const Button = styled.button`
   outline: none;
   border-radius: 50%;
   font-size: 26px;
-  background-color: ${accentColor};
-  color: white;
+  background-color: ${props => props.theme.colors.accent.base};
+  color: ${props => props.theme.colors.accent.text};
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.16);
   transition: 0.2s ease;
   cursor: pointer;

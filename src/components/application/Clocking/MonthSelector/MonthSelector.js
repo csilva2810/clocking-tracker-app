@@ -13,7 +13,7 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+  border-bottom: 1px solid ${props => props.theme.colors.divisors.base};
 `;
 
 const MonthSelector = props => {
@@ -48,9 +48,9 @@ const MonthSelector = props => {
 
   return (
     <Container>
-      <IconButton onClick={previousMonth} icon="keyboard_arrow_left" color="accent" />
+      <IconButton onClick={previousMonth} icon="keyboard_arrow_left" color="primary" />
       <HeaderTitle>{getMoment(month).format('MMM - YYYY')}</HeaderTitle>
-      <IconButton onClick={nextMonth} icon="keyboard_arrow_right" color="accent" />
+      <IconButton onClick={nextMonth} icon="keyboard_arrow_right" color="primary" />
     </Container>
   );
 };

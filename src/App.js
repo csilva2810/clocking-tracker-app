@@ -4,16 +4,19 @@ import { Provider } from 'react-redux';
 import Reset from './styles/reset';
 import Global from './styles/global';
 
-import Routes from './Routes';
 import store from './store';
+import Routes from './Routes';
+import ThemeProvider from './ThemeProvider';
 
 export default function App() {
   return (
     <>
-      <Reset />
-      <Global />
       <Provider store={store}>
-        <Routes />
+        <ThemeProvider>
+          <Reset />
+          <Global />
+          <Routes />
+        </ThemeProvider>
       </Provider>
     </>
   );

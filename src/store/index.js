@@ -6,7 +6,7 @@ import clocking from './clocking';
 import ui from './ui';
 import auth from './auth';
 
-import rootSaga from './sagas';
+import rootSaga from './root-saga';
 
 const store = configureStore(
   combineReducers({

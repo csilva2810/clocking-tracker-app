@@ -6,12 +6,14 @@ const GlobalStyles = createGlobalStyle`
   }
 
   html, body {
+    width: 100%;
     height: 100%;
+    padding: 0;
     margin: 0;
     font-family: "Montserrat", sans-serif;
     font-size: 16px;
-    color: #313131;
-    background-color: white;
+    color: ${props => props.theme.colors.text.base};
+    background-color: ${props => props.theme.colors.background.base};
   }
 
   button {
@@ -19,6 +21,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   #root {
+    width: 100%;
     height: 100%;
   }
 `;

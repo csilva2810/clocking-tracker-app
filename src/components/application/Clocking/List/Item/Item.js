@@ -6,6 +6,8 @@ import moment from 'moment';
 import { dangerColor, successColor } from '../../../../../styles/variables';
 import { dateFormat } from '../../../../../utils/time';
 
+import Text from '../../../../ui/Text';
+
 const Item = styled.li`
   display: block;
   padding: 16px 8px;
@@ -15,16 +17,8 @@ const Item = styled.li`
   }
 `;
 
-const Title = styled.h1`
-  font-size: 1.1rem;
-`;
-
-const Subtitle = styled.p`
-  color: #777;
+const Status = styled.div`
   font-size: 0.8rem;
-`;
-
-const Status = styled(Subtitle)`
   padding: 2px 4px;
   background-color: ${successColor}22;
   color: ${successColor};
@@ -60,14 +54,20 @@ const ClockingListItem = props => {
   return (
     <Item onClick={handleClick}>
       <Row>
-        <Title>
+        <Text scale="h6">
           {day.date}{' '}
-          <Subtitle as="span">{moment(day.date, dateFormat).format('ddd')}</Subtitle>
-        </Title>
+          <Text as="span" scale="h6" color="variant1">
+            {moment(day.date, dateFormat).format('ddd')}
+          </Text>
+        </Text>
       </Row>
       <Row>
-        <Subtitle>{formatClocking()}</Subtitle>
-        <Subtitle>Total: {day.workedHours}</Subtitle>
+        <Text scale="caption" color="variant1">
+          {formatClocking()}
+        </Text>
+        <Text scale="caption" color="variant1">
+          Total: {day.workedHours}
+        </Text>
         <Status danger={day.balance.includes('-')}>{day.balance}</Status>
       </Row>
     </Item>
