@@ -1,17 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import InputMask from 'react-input-mask';
 import moment from 'moment';
 
-import Summary from './Summary';
-import { dangerColor, accentColor } from '../../../../styles/variables';
 import {
   calculateWorkedHours,
   calculateBalance,
   dateFormat,
+  timeToMs,
 } from '../../../../utils/time';
 import useForm from '../../../../hooks/useForm';
+
+import Alert from '../../../ui/Alert';
+import Input from '../../../ui/Input';
+import Button from '../../../ui/Button';
+import Spinner from '../../../ui/Spinner';
+import IconButton from '../../../ui/IconButton';
+
+import Summary from './Summary';
 
 const FormControl = styled.div`
   padding: 0 8px;
@@ -22,74 +28,14 @@ const FormControl = styled.div`
   }
 `;
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: 4px;
-  font-weight: bold;
-`;
-
-const Input = styled(InputMask)`
-  display: block;
-  width: 100%;
-  height: 40px;
-  padding: 0 4px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  outline: none;
-  font-size: 0.9rem;
-  transition: 0.3s;
-  background-color: #fafafa;
-
-  &:focus {
-    border-color: ${accentColor};
-    box-shadow: 0 0 0 2px ${accentColor}44;
-  }
-
-  &:read-only {
-    background-color: #ddd;
-  }
-`;
-
 const InputGroup = styled.div`
   display: flex;
-  align-items: stretch;
+  align-items: center;
 `;
 
-const IconInput = styled.button.attrs({ type: 'button' })`
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-
-  &:focus {
-    background-color: #eee;
-  }
-`;
-
-const Error = styled.div`
-  font-size: 0.9rem;
-  color: ${dangerColor};
-  margin-top: 8px;
-`;
-
-const Button = styled.button`
-  display: block;
-  width: 100%;
-  min-width: 80px;
-  height: 48px;
-  padding: 8px;
-  color: white;
-  text-align: center;
-  font-size: 1.02rem;
-  background-color: ${accentColor};
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
+const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading }) => {
   const { fields, bindField, validateForm, errors, setFieldValue } = useForm({
-    fields: {
+    defaultValues: {
       date: values.date || '',
       in: values.in || '',
       lunchStart: values.lunchStart || '',
@@ -104,7 +50,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
           message: 'Informe o dia no padrão dd/mm/aaaa',
         },
         validate: value => {
-          const isAlreadyRegistered = days.find(item => item.date === value);
+          const isAlreadyRegistered = clocking.find(item => item.date === value);
 
           if (!editMode && isAlreadyRegistered) {
             return 'Data já cadastrada';
@@ -159,7 +105,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
     !errors.lunchEnd &&
     !errors.out,
   );
-  const days = useSelector(state => state.clocking);
+  const clocking = useSelector(state => state.clocking.data);
   const config = {
     workloadHours: 8,
   };
@@ -182,9 +128,15 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
     }
 
     onSubmit({
-      ...fields,
-      workedHours,
-      balance,
+      date: moment(fields.date, dateFormat)
+        .toDate()
+        .getTime(),
+      in: timeToMs(fields.in),
+      lunchStart: timeToMs(fields.lunchStart),
+      lunchEnd: timeToMs(fields.lunchEnd),
+      out: timeToMs(fields.out),
+      workedHours: timeToMs(workedHours),
+      balance: timeToMs(balance),
       config,
     });
   }
@@ -196,80 +148,77 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
   return (
     <form onSubmit={handleSubmit}>
       <FormControl>
-        <Label>Dia</Label>
         <InputGroup>
-          <Input
-            name="date"
-            type="tel"
-            placeholder="dd/mm/aaaa"
-            mask="99/99/9999"
-            maskPlaceholder={null}
-            readOnly={Boolean(values.date)}
-            {...bindField('date')}
-          />
+          <div style={{ flex: 1 }}>
+            <Input
+              label="Dia"
+              name="date"
+              type="tel"
+              placeholder="dd/mm/aaaa"
+              mask="99/99/9999"
+              readOnly={editMode}
+              error={errors.date}
+              {...bindField('date')}
+            />
+          </div>
           {!editMode && (
-            <IconInput
+            <IconButton
+              type="button"
+              icon="event"
               onClick={setDateForToday}
               aria-label="usar data de hoje"
               title="usar data de hoje"
-            >
-              <i className="material-icons">event</i>
-            </IconInput>
+            />
           )}
         </InputGroup>
-        {errors.date && <Error>{errors.date}</Error>}
       </FormControl>
 
       <FormControl>
-        <Label>Entrada</Label>
         <Input
+          label="Entrada"
           name="in"
           type="tel"
           placeholder="00:00"
           mask="99:99"
-          maskPlaceholder={null}
+          error={errors.in}
           {...bindField('in')}
         />
-        {errors.in && <Error>{errors.in}</Error>}
       </FormControl>
 
       <FormControl>
-        <Label>Saída almoço</Label>
         <Input
+          label="Saída almoço"
           name="lunchStart"
           type="tel"
           placeholder="00:00"
           mask="99:99"
-          maskPlaceholder={null}
+          error={errors.lunchStart}
           {...bindField('lunchStart')}
         />
-        {errors.lunchStart && <Error>{errors.lunchStart}</Error>}
       </FormControl>
 
       <FormControl>
-        <Label>Volta almoço</Label>
         <Input
+          label="Volta almoço"
           name="lunchEnd"
           type="tel"
           placeholder="00:00"
           mask="99:99"
-          maskPlaceholder={null}
+          error={errors.lunchEnd}
           {...bindField('lunchEnd')}
         />
-        {errors.lunchEnd && <Error>{errors.lunchEnd}</Error>}
       </FormControl>
 
       <FormControl>
-        <Label>Saída</Label>
         <Input
+          label="Saída"
           name="out"
           type="tel"
           placeholder="00:00"
           mask="99:99"
-          maskPlaceholder={null}
+          error={errors.out}
           {...bindField('out')}
         />
-        {errors.out && <Error>{errors.out}</Error>}
       </FormControl>
 
       <FormControl>
@@ -277,8 +226,12 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false }) => {
       </FormControl>
 
       <FormControl>
-        <Button type="submit">Salvar</Button>
+        <Button type="submit" disabled={loading}>
+          {loading ? <Spinner /> : 'Salvar'}
+        </Button>
       </FormControl>
+
+      {error && <Alert color="danger">Erro ao criar marcação. Tente novamente.</Alert>}
     </form>
   );
 };

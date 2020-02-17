@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const HOUR_CONVERSION = 60 * 60 * 1000;
 const MINUTE_CONVERSION = 60 * 1000;
 
@@ -28,8 +30,7 @@ export function msToTime(ms = 0) {
   seconds = seconds % 60;
 
   return (
-    preffix +
-    [String(hours).padStart(2, '0'), String(minutes).padStart(2, '0')].join(':')
+    preffix + [String(hours).padStart(2, '0'), String(minutes).padStart(2, '0')].join(':')
   );
 }
 
@@ -55,7 +56,8 @@ export function groupClockingByYearAndMonth(clocking) {
   const group = {};
 
   clocking.forEach(clocking => {
-    const [, month, year] = clocking.date.split('/');
+    const date = moment(clocking.date).format(dateFormat);
+    const [, month, year] = date.split('/');
     const monthAndYear = [month, year].join('/');
 
     if (!group[monthAndYear]) {

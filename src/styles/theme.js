@@ -22,9 +22,9 @@ export default function createTheme(mode = 'light') {
           variant1: '#DDDDDD',
         },
         gray: {
-          base: '#EEEEEE',
-          variant1: '#DDDDDD',
-          variant2: '#CCCCCC',
+          base: 'rgba(0, 0, 0, 0.1)',
+          variant1: 'rgba(0, 0, 0, 0.2)',
+          variant2: 'rgba(0, 0, 0, 0.3)',
         },
         primary: {
           base: '#2196f3',
@@ -72,8 +72,9 @@ export default function createTheme(mode = 'light') {
         variant1: 'rgba(236, 239, 241, 0.15)',
       },
       gray: {
-        base: '#DDDDDD',
-        variant1: '#CCCCCC',
+        base: 'rgba(255, 255, 255, 0.1)',
+        variant1: 'rgba(255, 255, 255, 0.2)',
+        variant2: 'rgba(255, 255, 255, 0.3)',
       },
       primary: {
         base: '#6ec6ff',

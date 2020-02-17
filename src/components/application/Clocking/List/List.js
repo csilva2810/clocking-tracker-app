@@ -22,15 +22,14 @@ const EmptyList = styled.div`
 const List = styled.ul`
   list-style: none;
   margin: 0;
-  background-color: ${props => props.theme.colors.surface.base};
 `;
 
-const ClockingList = ({ days = [] }) => {
-  if (days.length) {
+const ClockingList = ({ clocking = [] }) => {
+  if (clocking.length) {
     return (
       <List>
-        {days.map(day => (
-          <Item key={day.date} day={day} />
+        {clocking.map(clocking => (
+          <Item key={clocking.date} clocking={clocking} />
         ))}
       </List>
     );

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import VMasker from 'vanilla-masker';
 
 import Text from '../Text';
 
@@ -48,22 +49,40 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input = ({ label, error, ...inputAttrs }) => (
-  <>
-    {label && (
-      <Label as="label" htmlFor={inputAttrs.id} scale="body2">
-        {label}
-      </Label>
-    )}
+const Input = ({ label, error, mask, ...inputAttrs }) => {
+  const inputRef = useRef();
 
-    <StyledInput {...inputAttrs} />
+  useEffect(() => {
+    const ref = inputRef.current;
 
-    {error && (
-      <Error as="label" htmlFor={inputAttrs.id} scale="caption" color="danger">
-        {error}
-      </Error>
-    )}
-  </>
-);
+    if (mask && ref) {
+      VMasker(ref).maskPattern(mask);
+    }
+
+    return () => {
+      if (mask && ref) {
+        VMasker(ref).unMask();
+      }
+    };
+  }, [mask]);
+
+  return (
+    <>
+      {label && (
+        <Label as="label" htmlFor={inputAttrs.id} scale="body2" weight="bold">
+          {label}
+        </Label>
+      )}
+
+      <StyledInput ref={inputRef} {...inputAttrs} />
+
+      {error && (
+        <Error as="label" htmlFor={inputAttrs.id} scale="caption" color="danger">
+          {error}
+        </Error>
+      )}
+    </>
+  );
+};
 
 export default Input;

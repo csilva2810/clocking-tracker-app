@@ -10,7 +10,10 @@ const scales = {
 const colors = {
   base: props => props.theme.colors.text.base,
   variant1: props => props.theme.colors.text.variant1,
-  danger: props => props.theme.colors.danger.text,
+  danger: props =>
+    props.theme.mode === 'dark'
+      ? props.theme.colors.danger.text
+      : props.theme.colors.danger.base,
 };
 
 export default styled.p`

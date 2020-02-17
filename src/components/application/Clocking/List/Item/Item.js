@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import moment from 'moment';
 
 import { dangerColor, successColor } from '../../../../../styles/variables';
-import { dateFormat } from '../../../../../utils/time';
+import { dateFormat, msToTime } from '../../../../../utils/time';
 
 import Text from '../../../../ui/Text';
 
@@ -14,6 +14,10 @@ const Item = styled.li`
 
   &:last-child {
     margin-bottom: 100px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.surface.variant1};
   }
 `;
 
@@ -41,23 +45,31 @@ const Row = styled.div`
 `;
 
 const ClockingListItem = props => {
-  const { history, day } = props;
+  const { history, clocking } = props;
+
+  const date = moment(clocking.date).format(dateFormat);
+  const $in = msToTime(clocking.in);
+  const lunchStart = msToTime(clocking.lunchStart);
+  const lunchEnd = msToTime(clocking.lunchEnd);
+  const out = msToTime(clocking.out);
+  const workedHours = msToTime(clocking.workedHours);
+  const balance = msToTime(clocking.balance);
 
   function formatClocking() {
-    return `${day.in} - ${day.lunchStart} - ${day.lunchEnd} - ${day.out}`;
+    return `${$in} - ${lunchStart} - ${lunchEnd} - ${out}`;
   }
 
   function handleClick() {
-    history.push(`/app/clocking/${encodeURIComponent(day.date)}/edit`);
+    history.push(`/app/clocking/${new Date(clocking.date).getTime()}/edit`);
   }
 
   return (
     <Item onClick={handleClick}>
       <Row>
         <Text scale="h6">
-          {day.date}{' '}
+          {date}{' '}
           <Text as="span" scale="h6" color="variant1">
-            {moment(day.date, dateFormat).format('ddd')}
+            {moment(date, dateFormat).format('ddd')}
           </Text>
         </Text>
       </Row>
@@ -66,9 +78,9 @@ const ClockingListItem = props => {
           {formatClocking()}
         </Text>
         <Text scale="caption" color="variant1">
-          Total: {day.workedHours}
+          Total: {workedHours}
         </Text>
-        <Status danger={day.balance.includes('-')}>{day.balance}</Status>
+        <Status danger={balance.includes('-')}>{balance}</Status>
       </Row>
     </Item>
   );

@@ -18,23 +18,29 @@ export default function useForm({ defaultValues = {}, validations = {} }) {
     });
   }
 
+  function handleChange(e) {
+    const { name, value } = e.currentTarget;
+
+    setFieldValue(name, value);
+  }
+
+  function handleBlur(e) {
+    const { name, value } = e.currentTarget;
+    const error = validateField(name, value);
+
+    if (error) {
+      setFieldError(name, error);
+      return;
+    }
+
+    setFieldError(name, '');
+  }
+
   function bindField(name) {
     return {
       value: fields[name],
-      onChange: e => {
-        setFieldValue(name, e.target.value);
-      },
-      onBlur: e => {
-        const { name, value } = e.target;
-        const error = validateField(name, value);
-
-        if (error) {
-          setFieldError(name, error);
-          return;
-        }
-
-        setFieldError(name, null);
-      },
+      onChange: handleChange,
+      onBlur: handleBlur,
     };
   }
 
@@ -43,7 +49,7 @@ export default function useForm({ defaultValues = {}, validations = {} }) {
    * returns an errorMessage if the validation fails
    * returns null when no validation error was found
    * */
-  function validateField(name, value) {
+  function validateField(name, value = '') {
     const rules = validations[name];
 
     if (rules.required) {
@@ -66,14 +72,18 @@ export default function useForm({ defaultValues = {}, validations = {} }) {
       }
     }
 
-    return null;
+    return '';
   }
 
   function validateForm() {
     const err = {};
 
     Object.keys(validations).forEach(name => {
-      err[name] = validateField(name, fields[name]);
+      const error = validateField(name, fields[name]);
+
+      if (error) {
+        err[name] = error;
+      }
     });
 
     const hasErrors = Object.keys(err).length > 0;
