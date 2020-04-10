@@ -7,7 +7,7 @@ const initialState = {
   loading: false,
   error: false,
   success: false,
-  data: [],
+  data: null,
 };
 
 const reducer = (state = initialState, action) =>
@@ -78,5 +78,6 @@ const reducer = (state = initialState, action) =>
 
 export * from './actions';
 export * from './types';
+export * from './selectors';
 
 export default reducer;

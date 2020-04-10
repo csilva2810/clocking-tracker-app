@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import moment from 'moment';
 
 import { dangerColor, successColor } from '../../../../../styles/variables';
-import { dateFormat, msToTime } from '../../../../../utils/time';
+import { dateFormat } from '../../../../../utils/time';
 
 import Text from '../../../../ui/Text';
 
@@ -47,29 +47,21 @@ const Row = styled.div`
 const ClockingListItem = props => {
   const { history, clocking } = props;
 
-  const date = moment(clocking.date).format(dateFormat);
-  const $in = msToTime(clocking.in);
-  const lunchStart = msToTime(clocking.lunchStart);
-  const lunchEnd = msToTime(clocking.lunchEnd);
-  const out = msToTime(clocking.out);
-  const workedHours = msToTime(clocking.workedHours);
-  const balance = msToTime(clocking.balance);
-
   function formatClocking() {
-    return `${$in} - ${lunchStart} - ${lunchEnd} - ${out}`;
+    return `${clocking.in} - ${clocking.lunchStart} - ${clocking.lunchEnd} - ${clocking.out}`;
   }
 
   function handleClick() {
-    history.push(`/app/clocking/${new Date(clocking.date).getTime()}/edit`);
+    history.push(`/app/clocking/${encodeURIComponent(clocking.date)}/edit`);
   }
 
   return (
     <Item onClick={handleClick}>
       <Row>
         <Text scale="h6">
-          {date}{' '}
+          {clocking.date}{' '}
           <Text as="span" scale="h6" color="variant1">
-            {moment(date, dateFormat).format('ddd')}
+            {moment(clocking.date, dateFormat).format('ddd')}
           </Text>
         </Text>
       </Row>
@@ -78,9 +70,9 @@ const ClockingListItem = props => {
           {formatClocking()}
         </Text>
         <Text scale="caption" color="variant1">
-          Total: {workedHours}
+          Total: {clocking.workedHours}
         </Text>
-        <Status danger={balance.includes('-')}>{balance}</Status>
+        <Status danger={clocking.balance.includes('-')}>{clocking.balance}</Status>
       </Row>
     </Item>
   );

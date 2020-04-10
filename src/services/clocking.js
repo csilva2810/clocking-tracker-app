@@ -1,4 +1,26 @@
+import moment from 'moment';
+
 import api from './api';
 
-export const fetch = clocking => api.get('/clockings');
+import { msToTime, dateFormat } from '../utils/time';
+
+export const format = clocking => ({
+  date: moment(clocking.date).format(dateFormat),
+  in: msToTime(clocking.in),
+  lunchStart: msToTime(clocking.lunchStart),
+  lunchEnd: msToTime(clocking.lunchEnd),
+  out: msToTime(clocking.out),
+  workedHours: msToTime(clocking.workedHours),
+  balance: msToTime(clocking.balance),
+});
+
+export const fetch = clocking =>
+  api.get('/clockings').then(response => {
+    if (Array.isArray(response.data) && response.data.length) {
+      return response.data.map(format);
+    }
+
+    return [];
+  });
+
 export const create = clocking => api.post('/clockings', clocking);

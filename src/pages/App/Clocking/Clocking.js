@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Fab from '../../../components/ui/Fab';
 import Page from '../../../components/ui/Page';
 import Spinner from '../../../components/ui/Spinner';
+import EmptyList from '../../../components/ui/EmptyList';
+import TextButton from '../../../components/ui/TextButton';
 import PageLoading from '../../../components/ui/PageLoading';
 import Header, { HeaderTitle, HeaderColumn } from '../../../components/ui/Header';
 
@@ -13,26 +15,18 @@ import MonthSelector from '../../../components/application/Clocking/MonthSelecto
 import MonthSummary from '../../../components/application/Clocking/MonthSummary';
 import UserAvatar from '../../../components/application/User/UserAvatar';
 
-import { groupClockingByYearAndMonth } from '../../../utils/time';
 import { setSelectedMonth } from '../../../store/ui';
-import { fetchClockingRequest } from '../../../store/clocking';
+import { fetchClockingRequest, filterByYearAndMonth } from '../../../store/clocking';
 
 const Clocking = ({ history }) => {
   const dispatch = useDispatch();
-  const { loading, error, clocking, month } = useSelector(state => ({
+  const { loading, error, clocking, selectedMonth, shouldFetch } = useSelector(state => ({
     error: state.clocking.error,
-    clocking: state.clocking.data,
     loading: state.clocking.loading,
-    month: state.ui.selectedMonth,
+    selectedMonth: state.ui.selectedMonth,
+    shouldFetch: state.clocking.data === null,
+    clocking: filterByYearAndMonth(state),
   }));
-  const group = groupClockingByYearAndMonth(clocking);
-  const currentClocking = group[month] || [];
-
-  useEffect(() => {
-    if (!loading && clocking.length === 0) {
-      dispatch(fetchClockingRequest());
-    }
-  }, [clocking.length, dispatch, loading]);
 
   function setMonth(month) {
     dispatch(setSelectedMonth(month));
@@ -42,16 +36,49 @@ const Clocking = ({ history }) => {
     history.push('/app/clocking/create');
   }
 
-  if (loading) {
+  function fetchClocking() {
+    dispatch(fetchClockingRequest());
+  }
+
+  useEffect(() => {
+    if (!loading && shouldFetch) {
+      fetchClocking();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, shouldFetch]);
+
+  if (loading || shouldFetch) {
     return (
       <PageLoading>
-        <Spinner />
+        <Spinner color="accent" size="40px" borderWidth="3px" />
       </PageLoading>
     );
   }
 
-  if (error) {
-    return 'Erro ao carregar marcações. Tente novamente.';
+  function renderContent() {
+    if (error) {
+      return (
+        <EmptyList>
+          Erro ao carregar marcações.
+          <br />
+          <br />
+          <TextButton type="button" onClick={fetchClocking}>
+            Tentar novamente.
+          </TextButton>
+        </EmptyList>
+      );
+    }
+
+    if (clocking.length > 0) {
+      return <ClockingList clocking={clocking} />;
+    }
+
+    return (
+      <EmptyList>
+        <i className="material-icons">emoji_people</i>
+        <p>Você ainda não adicionou marcações</p>
+      </EmptyList>
+    );
   }
 
   return (
@@ -67,10 +94,11 @@ const Clocking = ({ history }) => {
         </HeaderColumn>
       </Header>
 
-      <MonthSelector month={month} onChange={setMonth} />
-      <MonthSummary clocking={currentClocking} />
+      <MonthSelector month={selectedMonth} onChange={setMonth} />
 
-      <ClockingList clocking={currentClocking} />
+      <MonthSummary clocking={clocking} />
+
+      {renderContent()}
 
       <Fab onClick={handleFabClick} />
     </Page>

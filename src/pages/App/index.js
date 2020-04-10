@@ -28,6 +28,8 @@ const App = () => {
    * Otherwise, the user will be redirected to the login page to authenticate again
    */
   useEffect(() => {
+    const token = getToken();
+
     async function fetchUser() {
       try {
         const response = await fetchAuthenticatedUser();
@@ -46,13 +48,13 @@ const App = () => {
     // we must try to get the authenticated user
     // this condition will happen on page refreshs or when the user navigates outside the
     // app and returns back again in another time
-    if (getToken() && !user) {
+    if (token && !user) {
       fetchUser();
       return;
     }
 
     setLoading(false);
-  }, [dispatch, user]);
+  }, [loading, error, dispatch, user]);
 
   // show a spinner header
   if (loading) {

@@ -64,8 +64,8 @@ export default function createTheme(mode = 'light') {
       },
       text: {
         base: '#ECEFF1',
-        variant1: '#CFD8DC',
-        variant2: '#B0BEC5',
+        variant1: '#b0bec5',
+        variant2: '#90a4ae',
       },
       divisors: {
         base: 'rgba(236, 239, 241, 0.1)',

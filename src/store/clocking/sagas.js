@@ -7,8 +7,8 @@ import * as ActionsTypes from './types';
 
 function* fetchClocking() {
   try {
-    const response = yield call(api.fetch);
-    yield put(actions.fetchClockingSuccess(response.data));
+    const clocking = yield call(api.fetch);
+    yield put(actions.fetchClockingSuccess(clocking));
   } catch (e) {
     yield put(actions.fetchClockingError());
   }

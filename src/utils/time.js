@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 const HOUR_CONVERSION = 60 * 60 * 1000;
 const MINUTE_CONVERSION = 60 * 1000;
 
@@ -50,22 +48,4 @@ export function calculateBalance(workedHours, workloadHours) {
   const diff = timeToMs(workedHours) - hoursToMs(workloadHours);
 
   return msToTime(diff);
-}
-
-export function groupClockingByYearAndMonth(clocking) {
-  const group = {};
-
-  clocking.forEach(clocking => {
-    const date = moment(clocking.date).format(dateFormat);
-    const [, month, year] = date.split('/');
-    const monthAndYear = [month, year].join('/');
-
-    if (!group[monthAndYear]) {
-      group[monthAndYear] = [clocking];
-    } else {
-      group[monthAndYear].push(clocking);
-    }
-  });
-
-  return group;
 }

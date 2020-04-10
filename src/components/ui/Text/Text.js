@@ -16,23 +16,18 @@ const colors = {
       : props.theme.colors.danger.base,
 };
 
+const textStyles = ({
+  color = 'base',
+  weight = 'normal',
+  align = 'unset',
+  scale = 'unset',
+}) => css`
+  color: ${colors[color]};
+  font-weight: ${weight};
+  text-align: ${align};
+  font-size: ${scales[scale] || 'unset'};
+`;
+
 export default styled.p`
-  ${({ color = 'base' }) =>
-    css`
-      color: ${colors[color]};
-    `}
-
-  ${({ weight = 'normal' }) => css`
-    font-weight: ${weight};
-  `}
-
-  ${({ align = 'inherit' }) => css`
-    text-align: ${align};
-  `}
-
-  ${({ scale }) =>
-    scale &&
-    css`
-      font-size: ${scales[scale]};
-    `}
+  ${textStyles}
 `;
