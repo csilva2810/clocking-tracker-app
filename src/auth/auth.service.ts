@@ -14,22 +14,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  /**
-   * Construct an user object only with attributes that can be publicly exposed
-   */
-  private getPublicUserData(
-    user: User,
-    aditionalData: Record<string, any> = {},
-  ) {
-    return {
-      email: user.email,
-      name: user.name,
-      avatar: user.avatar,
-      config: user.config,
-      ...aditionalData,
-    };
-  }
-
   private generateToken(user: User): string {
     return this.jwtService.sign({
       email: user.email,
@@ -44,17 +28,17 @@ export class AuthService {
       const passwordCheck = await compare(pass, user.password);
 
       if (passwordCheck) {
-        return this.getPublicUserData(user);
+        return user;
       }
     }
 
     return null;
   }
 
-  login(user: User) {
+  authorize(user: User) {
     const token = this.generateToken(user);
 
-    return this.getPublicUserData(user, { token });
+    return this.userService.getPublicUserData(user, { token });
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -70,12 +54,12 @@ export class AuthService {
       password: encryptedPassword,
     });
 
-    return this.login(newUser);
+    return this.authorize(newUser);
   }
 
   async getAuthenticatedUser(email: string) {
     const user = await this.userService.findOne(email);
 
-    return this.getPublicUserData(user);
+    return this.userService.getPublicUserData(user);
   }
 }

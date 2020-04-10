@@ -1,21 +1,20 @@
-import { IsString, ValidateNested, IsNumber } from 'class-validator';
-import { Type } from 'class-transformer';
-
-export class UserConfig {
-  @IsNumber()
-  public workloadHours: number;
-}
+import { IsString, IsObject, IsOptional } from 'class-validator';
 
 export class UpdateUserDto {
+  @IsOptional()
   @IsString({
     message: 'O campo "name" deve ser uma string',
   })
-  public name: string;
+  name: string;
 
+  @IsOptional()
   @IsString()
-  public avatar: string;
+  avatar: string;
 
-  @ValidateNested()
-  @Type(() => UserConfig)
-  public config: UserConfig;
+  @IsOptional()
+  @IsObject()
+  config: {
+    workloadHours: number;
+    theme: string;
+  };
 }

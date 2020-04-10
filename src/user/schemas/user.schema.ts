@@ -20,5 +20,9 @@ export const UserSchema = new mongoose.Schema<User>({
       type: Number,
       default: 8,
     },
+    theme: {
+      type: String,
+      default: 'light',
+    },
   },
 });
