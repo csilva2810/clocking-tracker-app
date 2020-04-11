@@ -1,4 +1,4 @@
-import { IsOptional, IsInt, IsObject } from 'class-validator';
+import { IsOptional, IsInt, IsObject, IsString } from 'class-validator';
 
 export class UpdateClockingDto {
   @IsOptional()
@@ -6,28 +6,28 @@ export class UpdateClockingDto {
   date: number;
 
   @IsOptional()
-  @IsInt()
-  in: number;
+  @IsString()
+  in: string;
 
   @IsOptional()
-  @IsInt()
-  lunchStart: number;
+  @IsString()
+  lunchStart: string;
 
   @IsOptional()
-  @IsInt()
-  lunchEnd: number;
+  @IsString()
+  lunchEnd: string;
 
   @IsOptional()
-  @IsInt()
-  out: number;
+  @IsString()
+  out: string;
 
   @IsOptional()
-  @IsInt()
-  workedHours: number;
+  @IsString()
+  workedHours: string;
 
   @IsOptional()
-  @IsInt()
-  balance: number;
+  @IsString()
+  balance: string;
 
   @IsOptional()
   @IsObject()

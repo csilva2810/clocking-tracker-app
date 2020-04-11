@@ -1,26 +1,26 @@
-import { IsInt, IsObject } from 'class-validator';
+import { IsInt, IsObject, IsString } from 'class-validator';
 
 export class CreateClockingDto {
   @IsInt()
   date: number;
 
-  @IsInt()
-  in: number;
+  @IsString()
+  in: string;
 
-  @IsInt()
-  lunchStart: number;
+  @IsString()
+  lunchStart: string;
 
-  @IsInt()
-  lunchEnd: number;
+  @IsString()
+  lunchEnd: string;
 
-  @IsInt()
-  out: number;
+  @IsString()
+  out: string;
 
-  @IsInt()
-  workedHours: number;
+  @IsString()
+  workedHours: string;
 
-  @IsInt()
-  balance: number;
+  @IsString()
+  balance: string;
 
   @IsObject()
   config: {
