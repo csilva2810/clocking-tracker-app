@@ -66,28 +66,28 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
       in: {
         required: 'Campo obrigatório',
         pattern: {
-          value: /\d{2}:\d{2}/gi,
+          value: /^\d{2}:\d{2}$/gi,
           message: 'Digite no padrão hh:mm',
         },
       },
       lunchStart: {
         required: 'Campo obrigatório',
         pattern: {
-          value: /\d{2}:\d{2}/gi,
+          value: /^\d{2}:\d{2}$/gi,
           message: 'Digite no padrão hh:mm',
         },
       },
       lunchEnd: {
         required: 'Campo obrigatório',
         pattern: {
-          value: /\d{2}:\d{2}/gi,
+          value: /^\d{2}:\d{2}$/gi,
           message: 'Digite no padrão hh:mm',
         },
       },
       out: {
         required: 'Campo obrigatório',
         pattern: {
-          value: /\d{2}:\d{2}/gi,
+          value: /^\d{2}:\d{2}$/gi,
           message: 'Digite no padrão hh:mm',
         },
       },
@@ -103,12 +103,12 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
     !errors.in &&
     !errors.lunchStart &&
     !errors.lunchEnd &&
-    !errors.out,
+    !errors.out
   );
-  const clocking = useSelector(state => state.clocking.data);
-  const config = {
-    workloadHours: 8,
-  };
+  const { clocking, config } = useSelector(state => ({
+    clocking: state.clocking.data,
+    config: state.auth.user.config,
+  }));
 
   let workedHours = '00:00';
   let balance = '00:00';
