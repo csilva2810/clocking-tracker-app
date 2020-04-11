@@ -3,12 +3,13 @@ import produce from 'immer';
 import moment from 'moment';
 
 import { SET_SELECTED_MONTH, SET_THEME } from './types';
+import { monthYearFormat } from '../../utils/time';
 
 const initialState = {
   selectedMonth: moment()
-    .format('MM/YYYY')
+    .format(monthYearFormat)
     .toString(),
-  theme: 'light',
+  theme: localStorage.getItem('theme') || 'light',
 };
 
 const reducer = (state = initialState, action) =>
@@ -22,6 +23,7 @@ const reducer = (state = initialState, action) =>
     switch (action.type) {
       case SET_THEME: {
         draft.theme = action.theme;
+        localStorage.setItem('theme', action.theme);
       }
     }
   });

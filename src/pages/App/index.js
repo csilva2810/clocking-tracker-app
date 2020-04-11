@@ -44,6 +44,13 @@ const App = () => {
       }
     }
 
+    console.log({
+      token,
+      user,
+      loading,
+      error,
+    });
+
     // if we have a token on localStorage and no user on store
     // we must try to get the authenticated user
     // this condition will happen on page refreshs or when the user navigates outside the
@@ -53,8 +60,15 @@ const App = () => {
       return;
     }
 
+    // if the neither the user nor the token exists, we should the error to true
+    // for the application to redirect the user to the login page
+    if (!token && !user) {
+      setError(true);
+    }
+
     setLoading(false);
-  }, [loading, error, dispatch, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // show a spinner header
   if (loading) {
