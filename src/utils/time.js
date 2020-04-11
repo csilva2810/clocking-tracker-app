@@ -44,3 +44,16 @@ export function calculateBalance(workedHours, workloadHours) {
 
   return msToTime(diff);
 }
+
+export function calculateSummary(clocking = []) {
+  return clocking.reduce(
+    (prev, current) => ({
+      workedHours: timeToMs(current.workedHours) + prev.workedHours,
+      balance: timeToMs(current.balance) + prev.balance,
+    }),
+    {
+      workedHours: 0,
+      balance: 0,
+    },
+  );
+}

@@ -4,6 +4,7 @@ import {
   msToTime,
   calculateWorkedHours,
   calculateBalance,
+  calculateSummary,
 } from './time';
 
 const oneHourInMs = 1 * 60 * 60 * 1000;
@@ -115,6 +116,66 @@ describe('time', () => {
       expect(calculateBalance('08:00', 8)).toBe('00:00');
       expect(calculateBalance('08:00', 7)).toBe('01:00');
       expect(calculateBalance('08:00', 9)).toBe('-01:00');
+    });
+  });
+
+  describe('calculateSummary', () => {
+    it('should return a summary of worked hours in an array of clockings', () => {
+      const clockings = [
+        {
+          workedHours: '08:00',
+          balance: '00:00',
+        },
+        {
+          workedHours: '07:00',
+          balance: '-01:00',
+        },
+        {
+          workedHours: '10:00',
+          balance: '02:00',
+        },
+      ];
+
+      const result = calculateSummary(clockings);
+      const formatted = {
+        workedHours: msToTime(result.workedHours),
+        balance: msToTime(result.balance),
+      };
+      expect(formatted).toEqual({
+        workedHours: '25:00',
+        balance: '01:00',
+      });
+    });
+
+    it('should calculate a negative balance', () => {
+      const clockings = [
+        {
+          workedHours: '07:00',
+          balance: '-01:00',
+        },
+        {
+          workedHours: '07:00',
+          balance: '-01:00',
+        },
+        {
+          workedHours: '06:30',
+          balance: '-01:30',
+        },
+        {
+          workedHours: '07:45',
+          balance: '-00:15',
+        },
+      ];
+
+      const result = calculateSummary(clockings);
+      const formatted = {
+        workedHours: msToTime(result.workedHours),
+        balance: msToTime(result.balance),
+      };
+      expect(formatted).toEqual({
+        workedHours: '28:15',
+        balance: '-03:45',
+      });
     });
   });
 });

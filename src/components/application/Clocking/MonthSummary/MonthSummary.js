@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { msToTime } from '../../../../utils/time';
+import { msToTime, calculateSummary } from '../../../../utils/time';
 
 const Container = styled.div`
   display: flex;
@@ -11,26 +11,13 @@ const Container = styled.div`
   border-bottom: 1px solid rgba(51, 51, 51, 0.1);
 `;
 
-function calculateSummary(clocking = []) {
-  return clocking.reduce(
-    (prev, current) => ({
-      workedHours: current.workedHours + prev.workedHours,
-      balance: current.balance + prev.balance,
-    }),
-    {
-      workedHours: 0,
-      balance: 0,
-    },
-  );
-}
-
 const MonthSummary = ({ clocking }) => {
   const { workedHours, balance } = calculateSummary(clocking);
 
   return (
     <Container>
-      <div>Total: {msToTime(workedHours)}</div>
-      <div>Saldo: {msToTime(balance)}</div>
+      <div>Total: {msToTime(workedHours)}h</div>
+      <div>Saldo: {msToTime(balance)}h</div>
     </Container>
   );
 };
