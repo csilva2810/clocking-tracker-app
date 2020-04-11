@@ -2,17 +2,12 @@ import moment from 'moment';
 
 import api from './api';
 
-import { msToTime, dateFormat } from '../utils/time';
+import { dateFormat } from '../utils/time';
 
-export const format = clocking => ({
-  id: clocking._id,
-  date: moment(clocking.date).format(dateFormat),
-  in: msToTime(clocking.in),
-  lunchStart: msToTime(clocking.lunchStart),
-  lunchEnd: msToTime(clocking.lunchEnd),
-  out: msToTime(clocking.out),
-  workedHours: msToTime(clocking.workedHours),
-  balance: msToTime(clocking.balance),
+export const format = ({ _id, date, ...rest }) => ({
+  ...rest,
+  id: _id,
+  date: moment(date).format(dateFormat),
 });
 
 export const fetch = clocking =>

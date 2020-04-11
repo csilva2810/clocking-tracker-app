@@ -7,7 +7,6 @@ import {
   calculateWorkedHours,
   calculateBalance,
   dateFormat,
-  timeToMs,
 } from '../../../../utils/time';
 import useForm from '../../../../hooks/useForm';
 
@@ -131,12 +130,12 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
       date: moment(fields.date, dateFormat)
         .toDate()
         .getTime(),
-      in: timeToMs(fields.in),
-      lunchStart: timeToMs(fields.lunchStart),
-      lunchEnd: timeToMs(fields.lunchEnd),
-      out: timeToMs(fields.out),
-      workedHours: timeToMs(workedHours),
-      balance: timeToMs(balance),
+      in: fields.in,
+      lunchStart: fields.lunchStart,
+      lunchEnd: fields.lunchEnd,
+      out: fields.out,
+      workedHours,
+      balance,
       config,
     });
   }
