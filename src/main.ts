@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { urlencoded, json } from 'express';
+import { urlencoded, json, Response, Request, Express } from 'express';
 
 import { AppModule } from './app.module';
 
@@ -13,7 +13,22 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(3001);
+  if (process.env.NODE_ENV === 'production') {
+    // if any file or route is handled by another resource of express
+    // express will return the index.html from the client
+    // and now React will try to handle the request
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const path = require('path');
+    const server: Express = app.getHttpServer();
+
+    server.get('*', (req: Request, res: Response) => {
+      res.sendFile(
+        path.resolve(__dirname, '..', 'client', 'build', 'index.html'),
+      );
+    });
+  }
+
+  await app.listen(process.env.PORT || 3001);
 }
 
 bootstrap();
