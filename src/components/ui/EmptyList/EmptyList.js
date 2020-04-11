@@ -7,6 +7,7 @@ export default styled.div`
   justify-content: center;
   width: 100%;
   min-height: 300px;
+  text-align: center;
   color: ${props => props.theme.colors.text.variant1};
 
   > i {

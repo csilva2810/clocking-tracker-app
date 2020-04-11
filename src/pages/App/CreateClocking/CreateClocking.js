@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import Page from '../../../components/ui/Page';
 import IconButton from '../../../components/ui/IconButton';
 import Header, { HeaderColumn, HeaderTitle } from '../../../components/ui/Header';
 
-import { createClockingRequest, createClockingReset } from '../../../store/clocking';
+import { createClockingRequest } from '../../../store/clocking';
 
 const CreateClocking = ({ history }) => {
   const dispatch = useDispatch();
@@ -17,10 +17,6 @@ const CreateClocking = ({ history }) => {
   function handleSubmit(data) {
     dispatch(createClockingRequest(data));
   }
-
-  useEffect(() => {
-    dispatch(createClockingReset());
-  });
 
   if (success) {
     return <Redirect to="/app/clocking" />;

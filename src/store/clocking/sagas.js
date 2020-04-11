@@ -23,7 +23,17 @@ function* createClocking(action) {
   }
 }
 
+function* editClocking(action) {
+  try {
+    const response = yield call(api.edit, action.id, action.clocking);
+    yield put(actions.editClockingSuccess(action.id, response.data));
+  } catch (e) {
+    yield put(actions.editClockingError());
+  }
+}
+
 export default function* clockingSaga() {
   yield takeLatest(ActionsTypes.FETCH_REQUEST, fetchClocking);
   yield takeLatest(ActionsTypes.CREATE_REQUEST, createClocking);
+  yield takeLatest(ActionsTypes.EDIT_REQUEST, editClocking);
 }

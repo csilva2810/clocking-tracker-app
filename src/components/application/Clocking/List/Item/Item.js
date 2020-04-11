@@ -44,15 +44,17 @@ const Row = styled.div`
   margin-top: 4px;
 `;
 
-const ClockingListItem = props => {
-  const { history, clocking } = props;
-
+const ClockingListItem = ({ history, clocking }) => {
   function formatClocking() {
-    return `${clocking.in} - ${clocking.lunchStart} - ${clocking.lunchEnd} - ${clocking.out}`;
+    return [clocking.in, clocking.lunchStart, clocking.lunchEnd, clocking.out].join(
+      ' - ',
+    );
   }
 
   function handleClick() {
-    history.push(`/app/clocking/${encodeURIComponent(clocking.date)}/edit`);
+    const date = clocking.date.replace(/[^\d]/gi, '');
+
+    history.push(`/app/clocking/${date}/edit`);
   }
 
   return (

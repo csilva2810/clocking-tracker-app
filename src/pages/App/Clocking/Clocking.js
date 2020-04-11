@@ -16,17 +16,24 @@ import MonthSummary from '../../../components/application/Clocking/MonthSummary'
 import UserAvatar from '../../../components/application/User/UserAvatar';
 
 import { setSelectedMonth } from '../../../store/ui';
-import { fetchClockingRequest, filterByYearAndMonth } from '../../../store/clocking';
+import {
+  fetchClockingRequest,
+  filterByYearAndMonth,
+  resetStatus,
+} from '../../../store/clocking';
 
 const Clocking = ({ history }) => {
   const dispatch = useDispatch();
-  const { loading, error, clocking, selectedMonth, shouldFetch } = useSelector(state => ({
-    error: state.clocking.error,
-    loading: state.clocking.loading,
-    selectedMonth: state.ui.selectedMonth,
-    shouldFetch: state.clocking.data === null,
-    clocking: filterByYearAndMonth(state),
-  }));
+  const { loading, error, success, clocking, selectedMonth, shouldFetch } = useSelector(
+    state => ({
+      error: state.clocking.error,
+      loading: state.clocking.loading,
+      success: state.clocking.success,
+      selectedMonth: state.ui.selectedMonth,
+      shouldFetch: state.clocking.data === null,
+      clocking: filterByYearAndMonth(state),
+    }),
+  );
 
   function setMonth(month) {
     dispatch(setSelectedMonth(month));
@@ -38,6 +45,32 @@ const Clocking = ({ history }) => {
 
   function fetchClocking() {
     dispatch(fetchClockingRequest());
+  }
+
+  function renderContent() {
+    if (error) {
+      return (
+        <EmptyList>
+          Erro ao carregar marcações.
+          <br />
+          <br />
+          <TextButton type="button" onClick={fetchClocking}>
+            Tentar novamente.
+          </TextButton>
+        </EmptyList>
+      );
+    }
+
+    if (clocking && clocking.length > 0) {
+      return <ClockingList clocking={clocking} />;
+    }
+
+    return (
+      <EmptyList>
+        <i className="material-icons">emoji_people</i>
+        <p>Você ainda não adicionou marcações</p>
+      </EmptyList>
+    );
   }
 
   useEffect(() => {
@@ -55,30 +88,8 @@ const Clocking = ({ history }) => {
     );
   }
 
-  function renderContent() {
-    if (error) {
-      return (
-        <EmptyList>
-          Erro ao carregar marcações.
-          <br />
-          <br />
-          <TextButton type="button" onClick={fetchClocking}>
-            Tentar novamente.
-          </TextButton>
-        </EmptyList>
-      );
-    }
-
-    if (clocking.length > 0) {
-      return <ClockingList clocking={clocking} />;
-    }
-
-    return (
-      <EmptyList>
-        <i className="material-icons">emoji_people</i>
-        <p>Você ainda não adicionou marcações</p>
-      </EmptyList>
-    );
+  if (success) {
+    dispatch(resetStatus());
   }
 
   return (

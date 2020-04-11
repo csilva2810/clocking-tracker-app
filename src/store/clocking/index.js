@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import produce from 'immer';
+import { format } from '../../services/clocking';
 
 import * as ActionTypes from './types';
 
@@ -10,71 +10,78 @@ const initialState = {
   data: null,
 };
 
-const reducer = (state = initialState, action) =>
-  produce(state, draft => {
-    switch (action.type) {
-      case ActionTypes.FETCH_REQUEST: {
-        draft.loading = true;
-        draft.error = false;
-        draft.success = false;
-        break;
-      }
-
-      case ActionTypes.FETCH_SUCCESS: {
-        draft.loading = false;
-        draft.error = false;
-        draft.success = false;
-        draft.data = action.clocking;
-        break;
-      }
-
-      case ActionTypes.FETCH_ERROR: {
-        draft.loading = false;
-        draft.error = true;
-        draft.success = false;
-        draft.data = [];
-        break;
-      }
-
-      case ActionTypes.CREATE_REQUEST: {
-        draft.loading = true;
-        draft.error = false;
-        draft.success = false;
-        break;
-      }
-
-      case ActionTypes.CREATE_SUCCESS: {
-        draft.loading = false;
-        draft.error = false;
-        draft.success = true;
-        draft.data.push(action.clocking);
-        break;
-      }
-
-      case ActionTypes.CREATE_ERROR: {
-        draft.loading = false;
-        draft.error = true;
-        draft.success = false;
-        break;
-      }
-
-      case ActionTypes.CREATE_RESET: {
-        draft.loading = false;
-        draft.error = false;
-        draft.success = false;
-        break;
-      }
-
-      // case EDIT_DAY: {
-      //   const { day } = action;
-      //   const index = draft.findIndex(i => i.date === day.date);
-
-      //   draft[index] = day;
-
-      //   break;
-      // }
+const loadingReducer = action => {
+  switch (action.type) {
+    case ActionTypes.FETCH_REQUEST:
+    case ActionTypes.CREATE_REQUEST:
+    case ActionTypes.EDIT_REQUEST: {
+      return true;
     }
-  });
+  }
+
+  return false;
+};
+
+const errorReducer = action => {
+  switch (action.type) {
+    case ActionTypes.FETCH_ERROR:
+    case ActionTypes.CREATE_ERROR:
+    case ActionTypes.EDIT_ERROR: {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const successReducer = action => {
+  switch (action.type) {
+    case ActionTypes.CREATE_SUCCESS:
+    case ActionTypes.EDIT_SUCCESS: {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const dataReducer = (state = null, action) => {
+  switch (action.type) {
+    case ActionTypes.FETCH_SUCCESS: {
+      return action.clocking;
+    }
+
+    case ActionTypes.FETCH_ERROR: {
+      return [];
+    }
+
+    case ActionTypes.CREATE_SUCCESS: {
+      return [...state, format(action.clocking)];
+    }
+
+    case ActionTypes.EDIT_SUCCESS: {
+      return state.map(item => {
+        if (item.id === action.id) {
+          return format(action.clocking);
+        }
+
+        return item;
+      });
+    }
+
+    default:
+      return state;
+  }
+};
+
+const reducer = (state = initialState, action) => {
+  return {
+    loading: loadingReducer(action),
+    error: errorReducer(action),
+    success: successReducer(action),
+    data: dataReducer(state.data, action),
+  };
+};
 
 export * from './actions';
 export * from './types';

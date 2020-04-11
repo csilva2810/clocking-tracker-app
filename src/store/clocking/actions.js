@@ -27,11 +27,22 @@ export const createClockingError = () => ({
   type: ActionTypes.CREATE_ERROR,
 });
 
-export const createClockingReset = () => ({
-  type: ActionTypes.CREATE_RESET,
+export const editClockingRequest = (id, clocking) => ({
+  type: ActionTypes.EDIT_REQUEST,
+  id,
+  clocking,
 });
 
-export const editDay = day => ({
-  type: ActionTypes.EDIT_CLOCKING,
-  day,
+export const editClockingSuccess = (id, clocking) => ({
+  type: ActionTypes.EDIT_SUCCESS,
+  id,
+  clocking,
+});
+
+export const editClockingError = () => ({
+  type: ActionTypes.EDIT_ERROR,
+});
+
+export const resetStatus = () => ({
+  type: ActionTypes.RESET_STATUS,
 });
