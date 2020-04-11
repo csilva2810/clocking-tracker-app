@@ -10,7 +10,8 @@ export const Container = styled.div`
 `;
 
 export const AvatarContainer = styled.div`
-  position: relative;
+  position: sticky;
+  top: 54px;
   display: flex;
   flex-direction: column;
   align-items: center;

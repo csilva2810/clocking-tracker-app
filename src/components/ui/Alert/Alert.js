@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
-import { animated } from 'react-spring';
 
-export default styled(animated.div)`
+export default styled.div`
   display: block;
   padding: 8px 16px;
   text-align: center;

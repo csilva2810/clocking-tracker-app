@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
+import transitions from './transitions';
+
 const GlobalStyles = createGlobalStyle`
   *, *::before, *::after {
     box-sizing: border-box;
@@ -24,6 +26,8 @@ const GlobalStyles = createGlobalStyle`
     width: 100%;
     height: 100%;
   }
+
+  ${transitions};
 `;
 
 export default GlobalStyles;

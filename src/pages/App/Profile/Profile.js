@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useSpring } from 'react-spring';
+import { CSSTransition } from 'react-transition-group';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -101,9 +101,6 @@ const ProfilePage = ({ history }) => {
     );
   }
 
-  const errorSpring = useSpring({ opacity: updateError ? 1 : 0 });
-  const successSpring = useSpring({ opacity: updateSuccess ? 1 : 0 });
-
   return (
     <Page withHeader={true} alternative={true}>
       <Header>
@@ -120,7 +117,7 @@ const ProfilePage = ({ history }) => {
           </FlatButton>
         </Styles.AvatarContainer>
 
-        <BottomMenu>
+        <BottomMenu style={{ zIndex: 2 }}>
           <form onSubmit={handleSubmit}>
             <Styles.FileInput
               type="file"
@@ -129,6 +126,21 @@ const ProfilePage = ({ history }) => {
               accept=".png,.jpeg,.jpg"
               ref={avatarInputRef}
             />
+
+            <CSSTransition
+              in={updateError || updateSuccess}
+              unmountOnExit
+              timeout={300}
+              classNames="fadeInOut"
+            >
+              <Styles.TitleSection>
+                {updateError ? (
+                  <Alert color="danger">Erro ao salvar os dados.</Alert>
+                ) : (
+                  <Alert color="success">Dados salvos com sucesso!</Alert>
+                )}
+              </Styles.TitleSection>
+            </CSSTransition>
 
             <Styles.TitleSection>
               <Text scale="h6" weight="bold">
@@ -193,18 +205,6 @@ const ProfilePage = ({ history }) => {
                 {updating ? <Spinner /> : 'Salvar'}
               </Button>
             </Styles.InputSection>
-
-            {updateError && (
-              <Alert color="danger" style={errorSpring}>
-                Erro ao salvar os dados.
-              </Alert>
-            )}
-
-            {updateSuccess && (
-              <Alert color="success" style={successSpring}>
-                Dados salvos com sucesso!
-              </Alert>
-            )}
           </form>
         </BottomMenu>
       </Styles.Container>
