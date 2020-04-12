@@ -2,14 +2,14 @@
 
 An app to track your working hours.
 
-<img alt="login" src="docs/screenshots/login.png" style="width: 180px;" />
-<img alt="signup" src="docs/screenshots/signup.png" style="width: 180px;" />
-<img alt="clocking-list" src="docs/screenshots/clocking-list.png" style="width: 180px;" />
-<img alt="create-clock" src="docs/screenshots/create-clock.png" style="width: 180px;" />
-<img alt="edit-clocking" src="docs/screenshots/edit-clocking.png" style="width: 180px;" />
-<img alt="edit-profile" src="docs/screenshots/edit-profile.png" style="width: 180px;" />
-<img alt="dark-theme-clocking" src="docs/screenshots/dark-theme-clocking.png" style="width: 180px;" />
-<img alt="dark-theme-profile" src="docs/screenshots/dark-theme-profile.png" style="width: 180px;" />
+![](docs/screenshots/login.png | width=180)
+![](docs/screenshots/signup.png | width=180)
+![](docs/screenshots/clocking-list.png | width=180)
+![](docs/screenshots/create-clock.png | width=180)
+![](docs/screenshots/edit-clocking.png | width=180)
+![](docs/screenshots/edit-profile.png | width=180)
+![](docs/screenshots/dark-theme-clocking.png | width=180)
+![](docs/screenshots/dark-theme-profile.png | width=180)
 
 ## Description
 
