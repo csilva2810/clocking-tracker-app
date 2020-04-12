@@ -2,7 +2,7 @@
 
 An app to track your working hours.
 
-![](docs/screenshots/login.png | width=180)
+![image](docs/screenshots/login.png | width=180)
 ![](docs/screenshots/signup.png | width=180)
 ![](docs/screenshots/clocking-list.png | width=180)
 ![](docs/screenshots/create-clock.png | width=180)
