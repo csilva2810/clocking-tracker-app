@@ -4,11 +4,15 @@
   "description": "",
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "concurrently \"npm run build:api\" \"npm run build:client\"",
+    "build": "nest build",
+    "postbuild": "cd client && yarn install && yarn build && cd ..",
+    "build:local": "concurrently \"npm run build:api\" \"npm run build:client\"",
     "build:client": "npm run build --prefix client",
-    "build:api": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "concurrently \"npm run start:dev\" \"npm run client\"",
     "start:dev": "nest start --watch",
@@ -20,7 +24,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "client": "npm run start --prefix client"
+    "client": "npm run start --prefix client",
+    "predeploy": "cd client && yarn install && yarn build && cd ..",
+    "deploy": "git push heroku master"
   },
   "dependencies": {
     "@hapi/joi": "17.1.0",
