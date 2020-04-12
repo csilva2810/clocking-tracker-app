@@ -6,9 +6,9 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "concurrently \"npm run build:api\" \"npm run build:client\"",
     "build:client": "npm run build --prefix client",
-    "build:full": "concurrently \"npm run build\" \"npm run build:client\"",
+    "build:api": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "concurrently \"npm run start:dev\" \"npm run client\"",
     "start:dev": "nest start --watch",
