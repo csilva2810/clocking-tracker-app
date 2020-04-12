@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client', 'build'),
+      exclude: ['/api*'],
     }),
     ConfigModule.forRoot({
       isGlobal: true,

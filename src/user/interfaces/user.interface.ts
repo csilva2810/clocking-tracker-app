@@ -5,6 +5,7 @@ export interface UserConfig {
 }
 
 export interface User extends Document {
+  _id: string;
   password: string;
   email: string;
   name?: string;
