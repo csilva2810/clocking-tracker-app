@@ -157,6 +157,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
               mask="99/99/9999"
               readOnly={editMode}
               error={errors.date}
+              maxLength={10}
               {...bindField('date')}
             />
           </div>
@@ -179,6 +180,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
           type="tel"
           placeholder="00:00"
           mask="99:99"
+          maxLength={5}
           error={errors.in}
           {...bindField('in')}
         />
@@ -191,6 +193,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
           type="tel"
           placeholder="00:00"
           mask="99:99"
+          maxLength={5}
           error={errors.lunchStart}
           {...bindField('lunchStart')}
         />
@@ -203,6 +206,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
           type="tel"
           placeholder="00:00"
           mask="99:99"
+          maxLength={5}
           error={errors.lunchEnd}
           {...bindField('lunchEnd')}
         />
@@ -215,6 +219,7 @@ const ClockingForm = ({ values = {}, onSubmit, editMode = false, error, loading 
           type="tel"
           placeholder="00:00"
           mask="99:99"
+          maxLength={5}
           error={errors.out}
           {...bindField('out')}
         />
