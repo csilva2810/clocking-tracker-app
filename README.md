@@ -6,8 +6,8 @@ An app to track your working hours.
 
 ## Description
 
-This app is a simple app that will help you calculate your working hours in a day
-and will give you a summary of how many hours are you working in a month.
+This is a simple app that will help you calculate your working hours in a day
+and will give you a summary of how many hours you are working in a month.
 
 ## Installation
 
@@ -50,11 +50,11 @@ $ cd client
 $ npm run test
 ```
 
-## Build
+## Build - Locally
 
 ```bash
 # build both api and frontend
-$ npm run build:full
+$ npm run build
 
 # run production build on local machine
 $ npm run start:prod
