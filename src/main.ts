@@ -12,6 +12,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('api');
 
   if (process.env.NODE_ENV === 'production') {
     // if any file or route is handled by another resource of express

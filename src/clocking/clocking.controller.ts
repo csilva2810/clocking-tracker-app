@@ -17,7 +17,7 @@ import { UpdateClockingDto } from './dtos/update-clocking.dto';
 import { Clocking } from './interfaces/clocking.interface';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('clockings')
+@Controller('/clockings')
 export class ClockingController {
   constructor(private readonly clockingService: ClockingService) {}
 

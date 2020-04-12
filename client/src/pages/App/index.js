@@ -44,13 +44,6 @@ const App = () => {
       }
     }
 
-    console.log({
-      token,
-      user,
-      loading,
-      error,
-    });
-
     // if we have a token on localStorage and no user on store
     // we must try to get the authenticated user
     // this condition will happen on page refreshs or when the user navigates outside the
