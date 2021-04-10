@@ -5,7 +5,7 @@ An app to track your working hours.
 | Login         | Sign Up              | Clocking list   |
 | --------------|:--------------------:| --------------- |
 | <img src="docs/screenshots/login.png" width=200 /> | <img src="docs/screenshots/signup.png" width=200 /> | <img src="docs/screenshots/clocking-list.png" width=200 /> |
-| Clocking a day | Sign Up              | Profile         |
+| Clocking a day | Edit a day          | Profile         |
 | <img src="docs/screenshots/create-clock.png" width=200 /> | <img src="docs/screenshots/edit-clocking.png" width=200 /> | <img src="docs/screenshots/edit-profile.png" width=200 /> |
 | Dark theme.    | Profile Dark         |
 | <img src="docs/screenshots/dark-theme-clocking.png" width=200 /> | <img src="docs/screenshots/dark-theme-profile.png" width=200 />
